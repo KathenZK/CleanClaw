@@ -26,10 +26,19 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!window.cleanClaw) {
+      setError("Desktop bridge is unavailable. Please reinstall CleanClaw.");
+      setPlatform("unknown");
+      return;
+    }
+
     void window.cleanClaw
       .getPlatform()
       .then((value) => setPlatform(value))
-      .catch(() => setPlatform("unknown"));
+      .catch(() => {
+        setPlatform("unknown");
+        setError("Failed to connect to the desktop runtime.");
+      });
   }, []);
 
   const groupedItems = useMemo(() => {
@@ -47,6 +56,11 @@ function App() {
   const canClean = !isCleaning && Boolean(scanResult?.items.length);
 
   const handleScan = async () => {
+    if (!window.cleanClaw) {
+      setError("Desktop bridge is unavailable. Please reinstall CleanClaw.");
+      return;
+    }
+
     setError(null);
     setCleanupResult(null);
     setIsScanning(true);
@@ -62,6 +76,11 @@ function App() {
   };
 
   const handleClean = async () => {
+    if (!window.cleanClaw) {
+      setError("Desktop bridge is unavailable. Please reinstall CleanClaw.");
+      return;
+    }
+
     if (!scanResult?.items.length) {
       return;
     }

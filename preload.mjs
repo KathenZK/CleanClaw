@@ -1,0 +1,1 @@
+"use strict";const e=require("electron"),c={getPlatform:()=>e.ipcRenderer.invoke("cleanclaw:get-platform"),scan:()=>e.ipcRenderer.invoke("cleanclaw:scan"),clean:n=>e.ipcRenderer.invoke("cleanclaw:clean",n)};e.contextBridge.exposeInMainWorld("cleanClaw",c);

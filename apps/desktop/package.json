@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.1.0",
   "description": "CleanClaw desktop cleaner for OpenClaw leftovers.",
-  "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
     "dev": "vite",
