@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { macDownloadUrl } from "@/lib/site";
+import { SmartDownloadButton } from "@/components/smart-download-button";
 import { getLocalizedMetadata } from "@/lib/seo";
 import { isLang, type Lang } from "@/lib/i18n";
 import { getMessages } from "@/lib/messages";
@@ -50,14 +50,11 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
 
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-            <a
-              href={macDownloadUrl}
-              target="_blank"
-              rel="noreferrer"
+            <SmartDownloadButton
+              label={home.primaryCta}
+              fallbackHref={`/${lang}/download`}
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-px hover:bg-slate-800"
-            >
-              {home.primaryCta}
-            </a>
+            />
             <Link
               href={`/${lang}/download`}
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:-translate-y-px hover:border-slate-300 hover:text-slate-950"

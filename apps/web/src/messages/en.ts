@@ -26,11 +26,11 @@ export const en: typeof zh = {
     title: "Remove OpenClaw cleanly, without leftovers.",
     lead: "Scan and remove OpenClaw installation files, configuration, caches, logs, background services, startup items, and Windows registry leftovers.",
     body: "The hard part of uninstalling software is not clicking remove. It is knowing what still remains on disk. CleanClaw finds those leftovers, shows them clearly, and lets you remove them with confidence.",
-    primaryCta: "Download for macOS",
+    primaryCta: "Download now",
     secondaryCta: "More download options",
     detectableTitle: "What it can find",
     detectableFooter:
-      "From app files to background services, every match is shown before cleanup. macOS is available now, and Windows is coming soon.",
+      "From app files to background services, every match is shown before cleanup. macOS and Windows downloads are available now.",
     processEyebrow: "How it works",
     processTitle: "Clean it up in one click.",
     process: [
@@ -69,7 +69,7 @@ export const en: typeof zh = {
   download: {
     metadata: {
       title: "Download CleanClaw",
-      description: "Get the latest CleanClaw installer. macOS is available now and Windows is coming soon.",
+      description: "Get the latest CleanClaw installer for macOS or Windows.",
     },
     eyebrow: "Download",
     title: "Download CleanClaw",
@@ -86,10 +86,10 @@ export const en: typeof zh = {
       },
       {
         platform: "Windows",
-        architecture: "Coming soon",
-        description: "The Windows installer is being packaged and verified.",
-        cta: "Windows coming soon",
-        available: false,
+        architecture: "x64",
+        description: "A `.exe` installer for Windows devices.",
+        cta: "Download for Windows",
+        available: true,
       },
     ],
     releaseTitle: "Versions and release notes",
@@ -113,7 +113,7 @@ export const en: typeof zh = {
       },
       {
         question: "Which systems are supported?",
-        answer: "The current release includes a macOS installer. Windows support is being prepared for release.",
+        answer: "The current release includes both macOS and Windows installers.",
       },
       {
         question: "Will it generate a cleanup report?",

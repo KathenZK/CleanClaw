@@ -23,10 +23,10 @@ export const zh = {
     title: "彻底清理 OpenClaw，不留残留。",
     lead: "扫描并删除 OpenClaw 的安装产物、配置、缓存、日志、后台服务、自启动项与 Windows 注册表残留。",
     body: "卸载软件最麻烦的地方，从来不是点一下删除，而是确认系统里还剩下什么。CleanClaw 把这些残留找出来、列清楚，再交给你决定是否移除。",
-    primaryCta: "立即下载 macOS 版",
+    primaryCta: "立即下载",
     secondaryCta: "更多下载方式",
     detectableTitle: "可识别内容",
-    detectableFooter: "从主程序到后台服务，命中项都会先展示出来。首版已提供 macOS 下载，Windows 版本即将提供。",
+    detectableFooter: "从主程序到后台服务，命中项都会先展示出来。当前已提供 macOS 与 Windows 下载。",
     processEyebrow: "使用方式",
     processTitle: "一键完成清理。",
     process: [
@@ -65,7 +65,7 @@ export const zh = {
   download: {
     metadata: {
       title: "下载 CleanClaw",
-      description: "获取 CleanClaw 最新安装包。当前提供 macOS 版本，Windows 版本即将提供。",
+      description: "获取 CleanClaw 最新安装包。当前提供 macOS 与 Windows 版本。",
     },
     eyebrow: "下载",
     title: "下载 CleanClaw",
@@ -82,10 +82,10 @@ export const zh = {
       },
       {
         platform: "Windows",
-        architecture: "即将提供",
-        description: "Windows 安装包正在补打包与验证流程，稍后提供。",
-        cta: "Windows 即将提供",
-        available: false,
+        architecture: "x64",
+        description: "适用于 Windows 设备的 `.exe` 安装包。",
+        cta: "下载 Windows 版",
+        available: true,
       },
     ],
     releaseTitle: "版本与发布说明",
@@ -109,7 +109,7 @@ export const zh = {
       },
       {
         question: "支持哪些系统？",
-        answer: "当前版本提供 macOS 安装包，Windows 版本正在整理与发布中。",
+        answer: "当前版本提供 macOS 与 Windows 安装包。",
       },
       {
         question: "会生成清理结果吗？",

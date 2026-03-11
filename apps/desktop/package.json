@@ -8,6 +8,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build && electron-builder",
     "build:app": "tsc -b && vite build",
+    "build:mac": "npm run build:app && electron-builder --mac dmg --publish never",
+    "build:win": "npm run build:app && electron-builder --win nsis --x64 --publish never",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -54,7 +56,12 @@
     },
     "win": {
       "target": [
-        "nsis"
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
       ]
     },
     "nsis": {
