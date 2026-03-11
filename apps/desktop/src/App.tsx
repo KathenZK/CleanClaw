@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import brandIcon from "../build/cleanclaw-icon.png";
 import type { CleanupResult, ScanResult } from "../shared/cleanup";
 import { getMessages } from "../shared/messages";
 import { normalizeLang } from "../shared/i18n";
@@ -58,7 +59,9 @@ function App() {
   const categoryLabels = messages.categoryLabels;
 
   const canScan = !isScanning && !isCleaning && supportedPlatforms.has(platform);
-  const canClean = !isCleaning && Boolean(scanResult?.items.length);
+  const matchedCount = scanResult?.items.length ?? 0;
+  const canClean = !isCleaning && matchedCount > 0;
+  const showScanWorkspace = isScanning || scanResult !== null;
 
   const handleScan = async () => {
     if (!window.cleanClaw) {
@@ -107,30 +110,65 @@ function App() {
   return (
     <div className="shell">
       <div className="hero">
-        <div>
-          <p className="eyebrow">CleanClaw</p>
-          <h1>{messages.app.title}</h1>
-          <p className="subtitle">{messages.app.subtitle}</p>
-        </div>
-        <div className="hero-meta">
-          <div>
-            <span className="meta-label">{messages.app.platform}</span>
-            <strong>{platform}</strong>
+        <div className="hero-top">
+          <div className="hero-brand" aria-hidden="true">
+            <img src={brandIcon} alt="" className="hero-brand-icon" />
+            <span className="hero-brand-name">CleanClaw</span>
           </div>
-          <div>
-            <span className="meta-label">{messages.app.lastScan}</span>
+          <div className="hero-copy">
+            <h1>{messages.app.title}</h1>
+            <p className="subtitle">{messages.app.subtitle}</p>
+          </div>
+          <div className="hero-stat">
+            <span className="meta-label">{messages.app.lastScan}：</span>
             <strong>{formatTimestamp(scanResult?.scannedAt, lang, messages.app.unavailable)}</strong>
           </div>
         </div>
-      </div>
-
-      <div className="actions">
-        <button className="primary-button" disabled={!canScan} onClick={() => void handleScan()}>
-          {isScanning ? messages.app.scanning : messages.app.startScan}
-        </button>
-        <button className="secondary-button" disabled={!canClean} onClick={() => setShowConfirm(true)}>
-          {messages.app.confirmCleanup}
-        </button>
+        {!showScanWorkspace ? (
+          <div className="action-stack">
+            <button className="primary-button hero-primary" disabled={!canScan} onClick={() => void handleScan()}>
+              {messages.app.startScan}
+            </button>
+          </div>
+        ) : (
+          <section className="scan-workspace">
+            <div className="scan-workspace-header">
+              <div className="scan-workspace-copy">
+                <p className="scan-workspace-label">
+                  {isScanning
+                    ? messages.app.scanning
+                    : matchedCount > 0
+                      ? `${messages.app.scanCompletePrefix} ${matchedCount} ${messages.app.scanCompleteSuffix}`
+                      : messages.app.scanEmptyTitle}
+                </p>
+                <h2 className="scan-workspace-title">
+                  {isScanning
+                    ? messages.app.scanProgressTitle
+                    : matchedCount > 0
+                      ? `${messages.app.scanCompletePrefix} ${matchedCount} ${messages.app.scanCompleteSuffix}`
+                      : messages.app.scanEmptyTitle}
+                </h2>
+                <p className="scan-workspace-body">
+                  {isScanning
+                    ? messages.app.scanProgressBody
+                    : matchedCount > 0
+                      ? messages.app.scanCompleteBody
+                      : messages.app.scanEmptyBody}
+                </p>
+              </div>
+              <div className="scan-workspace-actions">
+                {canClean ? (
+                  <button className="primary-button workspace-primary" onClick={() => setShowConfirm(true)}>
+                    {messages.app.startCleanNow}
+                  </button>
+                ) : null}
+                <button className="secondary-button workspace-secondary" disabled={isScanning} onClick={() => void handleScan()}>
+                  {messages.app.rescan}
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
       </div>
 
       {!supportedPlatforms.has(platform) ? (
@@ -160,11 +198,17 @@ function App() {
 
         {!scanResult ? (
           <div className="empty-state">
-            <p>{messages.app.emptyBeforeScan}</p>
+            <div className="empty-copy">
+              <strong>{isScanning ? messages.app.scanProgressTitle : messages.app.emptyStateTitle}</strong>
+              <p>{isScanning ? messages.app.scanProgressBody : messages.app.emptyBeforeScan}</p>
+            </div>
           </div>
         ) : scanResult.items.length === 0 ? (
           <div className="empty-state">
-            <p>{messages.app.emptyAfterScan}</p>
+            <div className="empty-copy">
+              <strong>{messages.app.cleanStateTitle}</strong>
+              <p>{messages.app.emptyAfterScan}</p>
+            </div>
           </div>
         ) : (
           <div className="group-list">
