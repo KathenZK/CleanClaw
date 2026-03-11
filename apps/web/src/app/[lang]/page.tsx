@@ -37,7 +37,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const { home } = messages;
 
   return (
-    <main className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-28 pt-6 lg:px-10">
+    <main className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-14 pt-6 lg:px-10">
       <section className="grid gap-10 border-t border-slate-200 pt-8 lg:grid-cols-[minmax(0,1.25fr)_22rem] lg:gap-16 lg:pt-12">
         <div className="space-y-6">
           <div className="space-y-6">
