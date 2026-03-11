@@ -1,15 +1,18 @@
 import fs from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Event, RenderProcessGoneDetails } from "electron";
+import type { Event, MenuItemConstructorOptions, RenderProcessGoneDetails } from "electron";
 import { cleanTargets, formatReport, scanOpenClaw } from "./openclaw";
 import type { AppPlatform, CleanupTarget } from "../shared/cleanup";
-import type { Lang } from "../shared/i18n";
+import { normalizeLang, type Lang } from "../shared/i18n";
+import { getMessages } from "../shared/messages";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const { app, BrowserWindow, ipcMain } = require("electron") as typeof import("electron");
+const nodeRequire = createRequire(import.meta.url);
+const { app, BrowserWindow, ipcMain, Menu, shell } = nodeRequire("electron") as typeof import("electron");
 
 let mainWindow: InstanceType<typeof BrowserWindow> | null = null;
 
@@ -56,6 +59,86 @@ function getDevServerUrl() {
     : MAIN_WINDOW_VITE_DEV_SERVER_URL;
 }
 
+function getSystemLang(): Lang {
+  const preferred =
+    typeof app.getPreferredSystemLanguages === "function"
+      ? app.getPreferredSystemLanguages()[0]
+      : app.getLocale();
+  return normalizeLang(preferred);
+}
+
+function setApplicationMenu(lang: Lang) {
+  const menu = getMessages(lang).menu;
+  const template: MenuItemConstructorOptions[] = [
+    {
+      label: menu.appName,
+      submenu: [
+        { label: menu.about, role: "about" },
+        { type: "separator" },
+        { label: menu.services, role: "services" },
+        { type: "separator" },
+        { label: menu.hide, role: "hide" },
+        { label: menu.hideOthers, role: "hideOthers" },
+        { label: menu.showAll, role: "unhide" },
+        { type: "separator" },
+        { label: menu.quit, role: "quit" },
+      ],
+    },
+    {
+      label: menu.file,
+      submenu: [{ label: menu.close, role: "close" }],
+    },
+    {
+      label: menu.edit,
+      submenu: [
+        { label: menu.undo, role: "undo" },
+        { label: menu.redo, role: "redo" },
+        { type: "separator" },
+        { label: menu.cut, role: "cut" },
+        { label: menu.copy, role: "copy" },
+        { label: menu.paste, role: "paste" },
+        { label: menu.selectAll, role: "selectAll" },
+      ],
+    },
+    {
+      label: menu.view,
+      submenu: [
+        { label: menu.reload, role: "reload" },
+        { label: menu.forceReload, role: "forceReload" },
+        { label: menu.toggleDevTools, role: "toggleDevTools" },
+        { type: "separator" },
+        { label: menu.resetZoom, role: "resetZoom" },
+        { label: menu.zoomIn, role: "zoomIn" },
+        { label: menu.zoomOut, role: "zoomOut" },
+        { type: "separator" },
+        { label: menu.toggleFullscreen, role: "togglefullscreen" },
+      ],
+    },
+    {
+      label: menu.window,
+      submenu: [
+        { label: menu.minimize, role: "minimize" },
+        { label: menu.close, role: "close" },
+        { type: "separator" },
+        { label: menu.front, role: "front" },
+      ],
+    },
+    {
+      label: menu.help,
+      submenu: [
+        {
+          label: menu.learnMore,
+          click: async () => {
+            await shell.openExternal("https://cleanclaw.icu");
+          },
+        },
+      ],
+    },
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+}
+
 async function createWindow() {
   await appendDebugLog("create-window:start");
   try {
@@ -66,7 +149,7 @@ async function createWindow() {
       height: 760,
       minWidth: 960,
       minHeight: 680,
-      title: "CleanClaw",
+      title: "",
       backgroundColor: "#f3f6fb",
       webPreferences: {
         preload: path.join(__dirname, "preload.js"),
@@ -77,7 +160,12 @@ async function createWindow() {
 
     await appendDebugLog("create-window:after-browser-window");
 
+    mainWindow.on("page-title-updated", (event) => {
+      event.preventDefault();
+    });
+
     mainWindow.webContents.on("did-finish-load", async () => {
+      mainWindow?.setTitle("");
       await appendDebugLog("did-finish-load");
 
       try {
@@ -171,6 +259,9 @@ ipcMain.handle("cleanclaw:clean", async (_event, items: CleanupTarget[], lang: L
 });
 
 app.whenReady().then(async () => {
+  const lang = getSystemLang();
+  app.setName(getMessages(lang).menu.appName);
+  setApplicationMenu(lang);
   await createWindow();
 
   app.on("activate", async () => {
