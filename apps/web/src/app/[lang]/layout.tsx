@@ -85,7 +85,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             </div>
           </header>
           {children}
-          <footer className="mx-auto mt-8 w-full max-w-6xl border-t border-slate-200 px-6 py-8 lg:px-10">
+          <footer className="mx-auto mt-4 w-full max-w-6xl border-t border-slate-200 px-6 py-6 lg:px-10">
             <div className="flex flex-col gap-2 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
               <p>{messages.footer.copyright}</p>
               <p>{messages.footer.note}</p>
