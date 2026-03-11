@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { currentVersion, getDownloads, publishedLabel, releaseUrl } from "@/lib/site";
+import { currentVersion, macDownloadUrl, publishedLabel, releaseUrl, windowsDownloadUrl } from "@/lib/site";
 import { getLocalizedMetadata } from "@/lib/seo";
 import { isLang, type Lang } from "@/lib/i18n";
+import { getMessages } from "@/lib/messages";
 
 interface DownloadPageProps {
   params: Promise<{ lang: string }>;
@@ -15,13 +16,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const resolvedLang: Lang = isLang(lang) ? lang : "zh";
+  const messages = getMessages(resolvedLang);
 
   return getLocalizedMetadata(resolvedLang, {
-    title: resolvedLang === "zh" ? "下载 CleanClaw" : "Download CleanClaw",
-    description:
-      resolvedLang === "zh"
-        ? "获取 CleanClaw 最新安装包。当前提供 macOS 版本，Windows 版本即将提供。"
-        : "Get the latest CleanClaw installer. macOS is available now and Windows is coming soon.",
+    title: messages.download.metadata.title,
+    description: messages.download.metadata.description,
     path: "/download",
   });
 }
@@ -30,39 +29,35 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
   const { lang } = await params;
   if (!isLang(lang)) notFound();
 
-  const downloads = getDownloads(lang);
+  const messages = getMessages(lang);
+  const { download } = messages;
+  const downloadHrefs = [macDownloadUrl, windowsDownloadUrl];
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 pb-24 pt-10 lg:px-10">
       <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_30px_120px_-48px_rgba(15,23,42,0.35)] lg:p-12">
-        <p className="text-sm uppercase tracking-[0.2em] text-slate-500">{lang === "zh" ? "下载" : "Download"}</p>
-        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">
-          {lang === "zh" ? "下载 CleanClaw" : "Download CleanClaw"}
-        </h1>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-          {lang === "zh"
-            ? "选择适合你设备的安装包，打开后即可开始扫描 OpenClaw 残留，并在确认后完成清理。"
-            : "Choose the installer for your device, launch the app, scan for OpenClaw leftovers, and clean them after confirmation."}
-        </p>
+        <p className="text-sm uppercase tracking-[0.2em] text-slate-500">{download.eyebrow}</p>
+        <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">{download.title}</h1>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">{download.lead}</p>
         <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-500">
           <span className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2">
-            {lang === "zh" ? "当前版本" : "Current version"} {currentVersion}
+            {download.versionLabel} {currentVersion}
           </span>
           <span className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2">
-            {lang === "zh" ? "发布时间" : "Published"} {publishedLabel}
+            {download.publishedLabel} {publishedLabel}
           </span>
         </div>
       </section>
 
       <section className="grid gap-6 md:grid-cols-2">
-        {downloads.map((item) => (
+        {download.cards.map((item, index) => (
           <article key={item.platform} className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
             <p className="text-sm uppercase tracking-[0.18em] text-slate-500">{item.platform}</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{item.architecture}</h2>
             <p className="mt-4 text-base leading-7 text-slate-600">{item.description}</p>
             {item.available ? (
               <a
-                href={item.href}
+                href={downloadHrefs[index]}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-8 inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
@@ -79,19 +74,15 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
       </section>
 
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
-        <h2 className="text-xl font-semibold text-slate-950">{lang === "zh" ? "版本与发布说明" : "Versions and release notes"}</h2>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
-          {lang === "zh"
-            ? "如果你想查看历史版本、发布说明，或手动下载所有安装包，可以前往 GitHub Release 页面。"
-            : "If you want release notes, older versions, or manual access to all installers, visit the GitHub release page."}
-        </p>
+        <h2 className="text-xl font-semibold text-slate-950">{download.releaseTitle}</h2>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{download.releaseBody}</p>
         <a
           href={releaseUrl}
           target="_blank"
           rel="noreferrer"
           className="mt-6 inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950"
         >
-          {lang === "zh" ? "查看 GitHub Release" : "Open GitHub release"}
+          {download.releaseCta}
         </a>
       </section>
     </main>

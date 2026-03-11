@@ -5,9 +5,9 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import "../globals.css";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { getNavigation } from "@/lib/site";
 import { getLocalizedMetadata } from "@/lib/seo";
-import { isLang, locales, type Lang } from "@/lib/i18n";
+import { getLocalizedPath, isLang, locales, type Lang } from "@/lib/i18n";
+import { getMessages } from "@/lib/messages";
 
 interface LocaleLayoutProps {
   children: React.ReactNode;
@@ -21,13 +21,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { lang } = await params;
   const resolvedLang: Lang = isLang(lang) ? lang : "zh";
+  const messages = getMessages(resolvedLang);
 
   return getLocalizedMetadata(resolvedLang, {
-    title: resolvedLang === "zh" ? "CleanClaw | 一键彻底清理 OpenClaw" : "CleanClaw | Remove OpenClaw completely",
-    description:
-      resolvedLang === "zh"
-        ? "扫描并删除 OpenClaw 的安装产物、配置、缓存、日志、后台服务、自启动项与 Windows 注册表残留。"
-        : "Scan and remove OpenClaw installation files, configuration, caches, logs, background services, startup items, and Windows registry leftovers.",
+    title: messages.home.metadata.title,
+    description: messages.home.metadata.description,
   });
 }
 
@@ -42,7 +40,14 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     notFound();
   }
 
-  const navigation = getNavigation(lang);
+  const messages = getMessages(lang);
+  const navigation = [
+    { href: getLocalizedPath(lang, "/"), label: messages.nav.home },
+    { href: getLocalizedPath(lang, "/download"), label: messages.nav.download },
+    { href: getLocalizedPath(lang, "/faq"), label: messages.nav.faq },
+    { href: getLocalizedPath(lang, "/docs"), label: messages.nav.docs },
+    { href: getLocalizedPath(lang, "/legal"), label: messages.nav.legal },
+  ] as const;
 
   return (
     <html lang={lang}>
@@ -53,7 +58,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,#f8fafc,white_55%)] text-slate-950">
           <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 lg:px-10">
             <Link href={`/${lang}`} className="text-lg font-semibold tracking-tight">
-              CleanClaw
+              {messages.site.brand}
             </Link>
             <div className="flex items-center gap-4">
               <nav className="hidden items-center gap-6 text-sm text-slate-600 md:flex">
@@ -64,7 +69,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
                 ))}
               </nav>
               <Suspense fallback={null}>
-                <LanguageSwitcher lang={lang} />
+                <LanguageSwitcher lang={lang} labels={messages.language} />
               </Suspense>
             </div>
           </header>

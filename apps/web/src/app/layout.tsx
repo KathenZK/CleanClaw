@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { zh } from "@/messages/zh";
 
 export const metadata: Metadata = {
-  title: "CleanClaw",
-  description: "CleanClaw helps users remove OpenClaw and its leftovers.",
+  title: zh.site.brand,
+  description: zh.site.metadataDescription,
 };
 
 export default function RootLayout({
