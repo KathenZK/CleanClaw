@@ -1,7 +1,7 @@
 export type Lang = "zh" | "en";
 export const locales: Lang[] = ["zh", "en"];
 export const defaultLang: Lang = "zh";
-export const siteUrl = "https://www.cleanclaw.icu";
+export const siteUrl = "https://cleanclaw.icu";
 
 export function normalizeLang(value?: string | null): Lang {
   return value === "en" ? "en" : defaultLang;

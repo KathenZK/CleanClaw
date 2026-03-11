@@ -27,7 +27,7 @@ export const en: typeof zh = {
     lead: "Scan and remove OpenClaw installation files, configuration, caches, logs, background services, startup items, and Windows registry leftovers.",
     body: "The hard part of uninstalling software is not clicking remove. It is knowing what still remains on disk. CleanClaw finds those leftovers, shows them clearly, and lets you remove them with confidence.",
     primaryCta: "Download for macOS",
-    secondaryCta: "See download options",
+    secondaryCta: "More download options",
     detectableTitle: "What it can find",
     detectableFooter:
       "From app files to background services, every match is shown before cleanup. macOS is available now, and Windows is coming soon.",
