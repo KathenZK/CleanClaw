@@ -26,7 +26,7 @@ export const zh = {
     primaryCta: "立即下载",
     secondaryCta: "更多下载方式",
     detectableTitle: "可识别内容",
-    detectableFooter: "从主程序到后台服务，命中项都会先展示出来。当前已提供 macOS 与 Windows 下载。",
+    detectableFooter: "从主程序到后台服务，命中项都会先展示出来。当前已提供 macOS Intel、macOS Apple Silicon 与 Windows x64 下载。",
     processEyebrow: "使用方式",
     processTitle: "一键完成清理。",
     process: [
@@ -65,7 +65,7 @@ export const zh = {
   download: {
     metadata: {
       title: "下载 CleanClaw",
-      description: "获取 CleanClaw 最新安装包。当前提供 macOS 与 Windows 版本。",
+      description: "获取 CleanClaw 最新安装包。当前提供 macOS Intel、macOS Apple Silicon 与 Windows x64 版本。",
     },
     eyebrow: "下载",
     title: "下载 CleanClaw",
@@ -77,14 +77,21 @@ export const zh = {
         platform: "macOS",
         architecture: "Apple Silicon",
         description: "适用于 Apple Silicon Mac 的 `.dmg` 安装包。",
-        cta: "下载 macOS 版",
+        cta: "下载 Apple Silicon 版",
+        available: true,
+      },
+      {
+        platform: "macOS",
+        architecture: "Intel",
+        description: "适用于 Intel Mac 的 `.dmg` 安装包。",
+        cta: "下载 Intel 版",
         available: true,
       },
       {
         platform: "Windows",
         architecture: "x64",
-        description: "适用于 Windows 设备的 `.exe` 安装包。",
-        cta: "下载 Windows 版",
+        description: "适用于 64 位 Windows 设备的 `.exe` 安装包。",
+        cta: "下载 Windows x64 版",
         available: true,
       },
     ],
@@ -109,7 +116,7 @@ export const zh = {
       },
       {
         question: "支持哪些系统？",
-        answer: "当前版本提供 macOS 与 Windows 安装包。",
+        answer: "当前版本提供 macOS Intel、macOS Apple Silicon 与 Windows x64 安装包。",
       },
       {
         question: "会生成清理结果吗？",

@@ -30,7 +30,7 @@ export const en: typeof zh = {
     secondaryCta: "More download options",
     detectableTitle: "What it can find",
     detectableFooter:
-      "From app files to background services, every match is shown before cleanup. macOS and Windows downloads are available now.",
+      "From app files to background services, every match is shown before cleanup. Downloads are now available for macOS Intel, macOS Apple Silicon, and Windows x64.",
     processEyebrow: "How it works",
     processTitle: "Clean it up in one click.",
     process: [
@@ -69,7 +69,7 @@ export const en: typeof zh = {
   download: {
     metadata: {
       title: "Download CleanClaw",
-      description: "Get the latest CleanClaw installer for macOS or Windows.",
+      description: "Get the latest CleanClaw installer for macOS Intel, macOS Apple Silicon, or Windows x64.",
     },
     eyebrow: "Download",
     title: "Download CleanClaw",
@@ -81,14 +81,21 @@ export const en: typeof zh = {
         platform: "macOS",
         architecture: "Apple Silicon",
         description: "A `.dmg` installer built for Apple Silicon Macs.",
-        cta: "Download for macOS",
+        cta: "Download for Apple Silicon",
+        available: true,
+      },
+      {
+        platform: "macOS",
+        architecture: "Intel",
+        description: "A `.dmg` installer built for Intel Macs.",
+        cta: "Download for Intel Mac",
         available: true,
       },
       {
         platform: "Windows",
         architecture: "x64",
-        description: "A `.exe` installer for Windows devices.",
-        cta: "Download for Windows",
+        description: "A `.exe` installer for 64-bit Windows devices.",
+        cta: "Download for Windows x64",
         available: true,
       },
     ],
@@ -113,7 +120,7 @@ export const en: typeof zh = {
       },
       {
         question: "Which systems are supported?",
-        answer: "The current release includes both macOS and Windows installers.",
+        answer: "The current release includes installers for macOS Intel, macOS Apple Silicon, and Windows x64.",
       },
       {
         question: "Will it generate a cleanup report?",

@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { currentVersion, macDownloadUrl, publishedLabel, releaseUrl, windowsDownloadUrl } from "@/lib/site";
+import {
+  currentVersion,
+  macArm64DownloadUrl,
+  macX64DownloadUrl,
+  publishedLabel,
+  releaseUrl,
+  windowsDownloadUrl,
+} from "@/lib/site";
 import { getLocalizedMetadata } from "@/lib/seo";
 import { isLang, type Lang } from "@/lib/i18n";
 import { getMessages } from "@/lib/messages";
@@ -31,11 +38,11 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
 
   const messages = getMessages(lang);
   const { download } = messages;
-  const downloadHrefs = [macDownloadUrl, windowsDownloadUrl];
+  const downloadHrefs = [macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl];
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 pb-24 pt-10 lg:px-10">
-      <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_30px_120px_-48px_rgba(15,23,42,0.35)] lg:p-12">
+      <section className="rounded-4xl border border-slate-200 bg-white p-8 shadow-[0_30px_120px_-48px_rgba(15,23,42,0.35)] lg:p-12">
         <p className="text-sm uppercase tracking-[0.2em] text-slate-500">{download.eyebrow}</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">{download.title}</h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">{download.lead}</p>
@@ -49,9 +56,9 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
         </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-2">
+      <section className="grid gap-6 md:grid-cols-3">
         {download.cards.map((item, index) => (
-          <article key={item.platform} className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
+          <article key={`${item.platform}-${item.architecture}`} className="rounded-3xl border border-slate-200 bg-white p-8">
             <p className="text-sm uppercase tracking-[0.18em] text-slate-500">{item.platform}</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{item.architecture}</h2>
             <p className="mt-4 text-base leading-7 text-slate-600">{item.description}</p>
@@ -73,7 +80,7 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
         ))}
       </section>
 
-      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
+      <section className="rounded-3xl border border-slate-200 bg-white p-8">
         <h2 className="text-xl font-semibold text-slate-950">{download.releaseTitle}</h2>
         <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{download.releaseBody}</p>
         <a

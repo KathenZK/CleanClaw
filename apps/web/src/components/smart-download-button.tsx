@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { macDownloadUrl, windowsDownloadUrl } from "@/lib/site";
+import { macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl } from "@/lib/site";
 
 type DownloadTarget = {
   href: string;
@@ -15,16 +15,46 @@ type SmartDownloadButtonProps = {
   className: string;
 };
 
-function detectDownloadTarget(fallbackHref: string): DownloadTarget {
+type NavigatorWithUAData = Navigator & {
+  userAgentData?: {
+    platform?: string;
+    getHighEntropyValues?: (
+      hints: string[],
+    ) => Promise<{
+      architecture?: string;
+      bitness?: string;
+      platform?: string;
+    }>;
+  };
+};
+
+function getWebGlRenderer(): string {
+  try {
+    const canvas = document.createElement("canvas");
+    const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+
+    if (!gl || !("getExtension" in gl) || !("getParameter" in gl)) {
+      return "";
+    }
+
+    const debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+
+    if (!debugInfo) {
+      return "";
+    }
+
+    return String(gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) ?? "").toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+async function detectDownloadTarget(fallbackHref: string): Promise<DownloadTarget> {
   if (typeof navigator === "undefined") {
     return { href: fallbackHref, external: false };
   }
 
-  const extendedNavigator = navigator as Navigator & {
-    userAgentData?: {
-      platform?: string;
-    };
-  };
+  const extendedNavigator = navigator as NavigatorWithUAData;
   const userAgent = navigator.userAgent.toLowerCase();
   const platform = (extendedNavigator.userAgentData?.platform ?? navigator.platform ?? "").toLowerCase();
 
@@ -33,7 +63,36 @@ function detectDownloadTarget(fallbackHref: string): DownloadTarget {
   }
 
   if (platform.includes("mac") || userAgent.includes("macintosh")) {
-    return { href: macDownloadUrl, external: true };
+    const highEntropyValues = await extendedNavigator.userAgentData?.getHighEntropyValues?.([
+      "architecture",
+      "bitness",
+      "platform",
+    ]);
+    const architecture = highEntropyValues?.architecture?.toLowerCase() ?? "";
+    const renderer = getWebGlRenderer();
+
+    if (architecture.includes("arm")) {
+      return { href: macArm64DownloadUrl, external: true };
+    }
+
+    if (architecture.includes("x86")) {
+      return { href: macX64DownloadUrl, external: true };
+    }
+
+    if (renderer.includes("apple") || /\bm\d\b/.test(renderer)) {
+      return { href: macArm64DownloadUrl, external: true };
+    }
+
+    if (
+      renderer.includes("intel") ||
+      renderer.includes("amd") ||
+      renderer.includes("radeon") ||
+      renderer.includes("nvidia")
+    ) {
+      return { href: macX64DownloadUrl, external: true };
+    }
+
+    return { href: fallbackHref, external: false };
   }
 
   return { href: fallbackHref, external: false };
@@ -50,7 +109,17 @@ export function SmartDownloadButton({
   });
 
   useEffect(() => {
-    setTarget(detectDownloadTarget(fallbackHref));
+    let isMounted = true;
+
+    void detectDownloadTarget(fallbackHref).then((resolvedTarget) => {
+      if (isMounted) {
+        setTarget(resolvedTarget);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
   }, [fallbackHref]);
 
   if (target.external) {

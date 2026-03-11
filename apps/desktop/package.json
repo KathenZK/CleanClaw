@@ -8,7 +8,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build && electron-builder",
     "build:app": "tsc -b && vite build",
-    "build:mac": "npm run build:app && electron-builder --mac dmg --publish never",
+    "build:mac": "npm run build:app && electron-builder --mac dmg --x64 --arm64 --publish never",
+    "build:mac:intel": "npm run build:app && electron-builder --mac dmg --x64 --publish never",
+    "build:mac:arm64": "npm run build:app && electron-builder --mac dmg --arm64 --publish never",
     "build:win": "npm run build:app && electron-builder --win nsis --x64 --publish never",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -49,8 +51,15 @@
     },
     "mac": {
       "target": [
-        "dmg"
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}",
       "category": "public.app-category.utilities",
       "icon": "build/icon.icns"
     },
@@ -62,7 +71,8 @@
             "x64"
           ]
         }
-      ]
+      ],
+      "artifactName": "${productName} Setup ${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
