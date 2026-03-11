@@ -1,30 +1,61 @@
 import Link from "next/link";
-import { cleanupTargets, currentVersion, macDownloadUrl } from "@/lib/site";
+import { getRequestLang } from "@/lib/i18n";
+import { currentVersion, getCleanupTargets, macDownloadUrl } from "@/lib/site";
 
-export default function Home() {
+export default async function Home() {
+  const lang = await getRequestLang();
+  const cleanupTargets = getCleanupTargets(lang);
   const principles = [
-    {
-      label: "先扫描",
-      title: "清理前先列出命中项",
-      description: "不会上来就删。先把路径、服务、自启动项和注册表残留列给你看，再由你确认。",
-    },
-    {
-      label: "再确认",
-      title: "一次确认，避免误删",
-      description: "操作流程保持克制，不做复杂配置，也不把风险藏在高级选项里。",
-    },
-    {
-      label: "留结果",
-      title: "清理完成后给出结果报告",
-      description: "成功项与失败项都会保留在结果列表里，便于复查和继续处理。",
-    },
+    lang === "zh"
+      ? {
+          label: "先扫描",
+          title: "清理前先列出命中项",
+          description: "不会上来就删。先把路径、服务、自启动项和注册表残留列给你看，再由你确认。",
+        }
+      : {
+          label: "Scan first",
+          title: "See every match before removal",
+          description:
+            "Nothing is removed immediately. CleanClaw lists paths, services, startup items, and registry leftovers first.",
+        },
+    lang === "zh"
+      ? {
+          label: "再确认",
+          title: "一次确认，避免误删",
+          description: "操作流程保持克制，不做复杂配置，也不把风险藏在高级选项里。",
+        }
+      : {
+          label: "Confirm once",
+          title: "A restrained flow with fewer mistakes",
+          description:
+            "The process stays simple. No dense settings panel, no hidden risk behind advanced options.",
+        },
+    lang === "zh"
+      ? {
+          label: "留结果",
+          title: "清理完成后给出结果报告",
+          description: "成功项与失败项都会保留在结果列表里，便于复查和继续处理。",
+        }
+      : {
+          label: "Keep the result",
+          title: "Get a clear cleanup report afterward",
+          description:
+            "Successful and failed items stay in the result list so you can review what happened.",
+        },
   ] as const;
 
-  const process = [
-    "扫描本机中的 OpenClaw 应用本体、目录残留、缓存、日志、服务与注册表项。",
-    "把命中项按类别分组展示，方便确认哪些内容会被移除。",
-    "用户确认后执行清理，并生成简单的结果报告。",
-  ] as const;
+  const process =
+    lang === "zh"
+      ? [
+          "扫描本机中的 OpenClaw 应用本体、目录残留、缓存、日志、服务与注册表项。",
+          "把命中项按类别分组展示，方便确认哪些内容会被移除。",
+          "用户确认后执行清理，并生成简单的结果报告。",
+        ]
+      : [
+          "Scan your device for OpenClaw app files, leftover directories, caches, logs, services, and registry entries.",
+          "Group every match by category so it is clear what will be removed.",
+          "Run the cleanup only after confirmation, then generate a simple result report.",
+        ];
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-28 pt-10 lg:px-10">
@@ -34,20 +65,27 @@ export default function Home() {
             <span className="rounded-full border border-slate-200 bg-white px-4 py-2">
               CleanClaw {currentVersion}
             </span>
-            <span>For users who want OpenClaw gone for good.</span>
+            <span>
+              {lang === "zh"
+                ? "帮助你把 OpenClaw 及其残留从电脑里清干净。"
+                : "For users who want OpenClaw gone for good."}
+            </span>
           </div>
 
           <div className="space-y-6">
             <p className="text-sm tracking-[0.18em] text-slate-500">CleanClaw.icu</p>
             <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-slate-950 md:text-7xl">
-              一键彻底清理 OpenClaw
+              {lang === "zh" ? "一键彻底清理 OpenClaw" : "Remove OpenClaw completely"}
             </h1>
             <p className="max-w-[62ch] text-lg leading-8 text-slate-600 md:text-xl">
-              扫描并删除 OpenClaw 的安装产物、配置、缓存、日志、后台服务、自启动项与 Windows 注册表残留。
+              {lang === "zh"
+                ? "扫描并删除 OpenClaw 的安装产物、配置、缓存、日志、后台服务、自启动项与 Windows 注册表残留。"
+                : "Scan and remove OpenClaw installation files, configuration, caches, logs, background services, startup items, and Windows registry leftovers."}
             </p>
             <p className="max-w-[62ch] text-base leading-7 text-slate-500">
-              CleanClaw is built for the boring but important part of uninstalling software: finding
-              what is still left on disk, showing it clearly, and letting you remove it deliberately.
+              {lang === "zh"
+                ? "卸载软件最麻烦的地方，不是点删除，而是找出磁盘里还剩下什么、哪些后台项还在、以及哪些内容值得保留。CleanClaw 把这件事做得更直接。"
+                : "CleanClaw is built for the boring but important part of uninstalling software: finding what is still left on disk, showing it clearly, and letting you remove it deliberately."}
             </p>
           </div>
 
@@ -58,20 +96,22 @@ export default function Home() {
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-px hover:bg-slate-800"
             >
-              下载 macOS 版
+              {lang === "zh" ? "下载 macOS 版" : "Download for macOS"}
             </a>
             <Link
               href="/download"
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:-translate-y-px hover:border-slate-300 hover:text-slate-950"
             >
-              查看全部下载选项
+              {lang === "zh" ? "查看全部下载选项" : "View all download options"}
             </Link>
           </div>
         </div>
 
         <aside className="flex flex-col justify-between gap-8 rounded-3xl bg-[#eef2f6] p-7">
           <div className="space-y-3">
-            <p className="text-sm tracking-[0.18em] text-slate-500">What it checks</p>
+            <p className="text-sm tracking-[0.18em] text-slate-500">
+              {lang === "zh" ? "检查范围" : "What it checks"}
+            </p>
             <div className="space-y-2">
               {cleanupTargets.slice(0, 4).map((target, index) => (
                 <div
@@ -87,7 +127,9 @@ export default function Home() {
 
           <div className="border-t border-slate-200 pt-5">
             <p className="text-sm leading-7 text-slate-600">
-              清理前会先展示命中项，并再次弹窗确认。首版支持 macOS，Windows 安装包正在补充中。
+              {lang === "zh"
+                ? "清理前会先展示命中项，并再次弹窗确认。首版支持 macOS，Windows 安装包正在补充中。"
+                : "Every match is shown before cleanup and confirmed again in a dialog. The first release supports macOS, and Windows is on the way."}
             </p>
           </div>
         </aside>
@@ -95,9 +137,11 @@ export default function Home() {
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
         <article className="rounded-3xl bg-white p-8 shadow-[0_24px_70px_-45px_rgba(15,23,42,0.22)]">
-          <p className="text-sm tracking-[0.18em] text-slate-500">How it works</p>
+          <p className="text-sm tracking-[0.18em] text-slate-500">
+            {lang === "zh" ? "工作方式" : "How it works"}
+          </p>
           <h2 className="mt-5 max-w-md text-3xl font-semibold tracking-[-0.04em] text-slate-950">
-            清理流程保持克制，而不是复杂。
+            {lang === "zh" ? "清理流程保持克制，而不是复杂。" : "A cleanup flow that stays restrained instead of complex."}
           </h2>
           <div className="mt-8 space-y-6">
             {process.map((item, index) => (
@@ -111,9 +155,11 @@ export default function Home() {
 
         <article className="grid gap-4 rounded-3xl bg-[#f7f4ee] p-8">
           <div className="max-w-lg">
-            <p className="text-sm tracking-[0.18em] text-slate-500">Product principles</p>
+            <p className="text-sm tracking-[0.18em] text-slate-500">
+              {lang === "zh" ? "产品原则" : "Product principles"}
+            </p>
             <h2 className="mt-5 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
-              不抢戏，但把该说明的内容说明白。
+              {lang === "zh" ? "不抢戏，但把该说明的内容说明白。" : "It stays quiet, but it explains the important parts clearly."}
             </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
@@ -137,9 +183,13 @@ export default function Home() {
 
       <section className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <div className="pt-2">
-          <p className="text-sm tracking-[0.18em] text-slate-500">Coverage</p>
+          <p className="text-sm tracking-[0.18em] text-slate-500">
+            {lang === "zh" ? "覆盖范围" : "Coverage"}
+          </p>
           <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
-            首版聚焦把 OpenClaw 残留清理干净。
+            {lang === "zh"
+              ? "首版聚焦把 OpenClaw 残留清理干净。"
+              : "The first release focuses on cleaning up OpenClaw thoroughly."}
           </h2>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
