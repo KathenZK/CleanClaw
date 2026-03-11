@@ -1,16 +1,41 @@
-import { getRequestLang } from "@/lib/i18n";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { currentVersion, getDownloads, publishedLabel, releaseUrl } from "@/lib/site";
+import { getLocalizedMetadata } from "@/lib/seo";
+import { isLang, type Lang } from "@/lib/i18n";
 
-export default async function DownloadPage() {
-  const lang = await getRequestLang();
+interface DownloadPageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const resolvedLang: Lang = isLang(lang) ? lang : "zh";
+
+  return getLocalizedMetadata(resolvedLang, {
+    title: resolvedLang === "zh" ? "下载 CleanClaw" : "Download CleanClaw",
+    description:
+      resolvedLang === "zh"
+        ? "获取 CleanClaw 的最新安装包。当前提供 macOS 版本，Windows 版本即将提供。"
+        : "Download the latest CleanClaw installer. macOS is available now and Windows is coming soon.",
+    path: "/download",
+  });
+}
+
+export default async function DownloadPage({ params }: DownloadPageProps) {
+  const { lang } = await params;
+  if (!isLang(lang)) notFound();
+
   const downloads = getDownloads(lang);
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 pb-24 pt-10 lg:px-10">
       <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_30px_120px_-48px_rgba(15,23,42,0.35)] lg:p-12">
-        <p className="text-sm uppercase tracking-[0.2em] text-slate-500">
-          {lang === "zh" ? "下载" : "Download"}
-        </p>
+        <p className="text-sm uppercase tracking-[0.2em] text-slate-500">{lang === "zh" ? "下载" : "Download"}</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">
           {lang === "zh" ? "下载 CleanClaw" : "Download CleanClaw"}
         </h1>
@@ -33,9 +58,7 @@ export default async function DownloadPage() {
         {downloads.map((item) => (
           <article key={item.platform} className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
             <p className="text-sm uppercase tracking-[0.18em] text-slate-500">{item.platform}</p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">
-              {item.architecture}
-            </h2>
+            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{item.architecture}</h2>
             <p className="mt-4 text-base leading-7 text-slate-600">{item.description}</p>
             {item.available ? (
               <a
@@ -56,9 +79,7 @@ export default async function DownloadPage() {
       </section>
 
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
-        <h2 className="text-xl font-semibold text-slate-950">
-          {lang === "zh" ? "Release 页面" : "Release notes"}
-        </h2>
+        <h2 className="text-xl font-semibold text-slate-950">{lang === "zh" ? "Release 页面" : "Release notes"}</h2>
         <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
           {lang === "zh"
             ? "需要查看完整发布说明、后续版本或手动下载资产时，可以前往 GitHub Releases 页面。"

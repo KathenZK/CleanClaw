@@ -1,8 +1,34 @@
-import { getRequestLang } from "@/lib/i18n";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getCleanupTargets } from "@/lib/site";
+import { getLocalizedMetadata } from "@/lib/seo";
+import { isLang, type Lang } from "@/lib/i18n";
 
-export default async function DocsPage() {
-  const lang = await getRequestLang();
+interface DocsPageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const resolvedLang: Lang = isLang(lang) ? lang : "zh";
+
+  return getLocalizedMetadata(resolvedLang, {
+    title: resolvedLang === "zh" ? "CleanClaw 清理说明" : "CleanClaw cleanup guide",
+    description:
+      resolvedLang === "zh"
+        ? "了解 CleanClaw 的扫描范围、确认流程和清理报告。"
+        : "Learn about CleanClaw coverage, confirmation flow, and cleanup reporting.",
+    path: "/docs",
+  });
+}
+
+export default async function DocsPage({ params }: DocsPageProps) {
+  const { lang } = await params;
+  if (!isLang(lang)) notFound();
   const cleanupTargets = getCleanupTargets(lang);
 
   return (

@@ -1,7 +1,33 @@
-import { getRequestLang } from "@/lib/i18n";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getLocalizedMetadata } from "@/lib/seo";
+import { isLang, type Lang } from "@/lib/i18n";
 
-export default async function LegalPage() {
-  const lang = await getRequestLang();
+interface LegalPageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const resolvedLang: Lang = isLang(lang) ? lang : "zh";
+
+  return getLocalizedMetadata(resolvedLang, {
+    title: resolvedLang === "zh" ? "CleanClaw 隐私与免责声明" : "CleanClaw privacy and disclaimer",
+    description:
+      resolvedLang === "zh"
+        ? "查看 CleanClaw 的隐私说明、免责声明以及清理前确认提示。"
+        : "Read the CleanClaw privacy note, disclaimer, and cleanup confirmation guidance.",
+    path: "/legal",
+  });
+}
+
+export default async function LegalPage({ params }: LegalPageProps) {
+  const { lang } = await params;
+  if (!isLang(lang)) notFound();
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-6 pb-24 pt-10 lg:px-10">
@@ -14,9 +40,7 @@ export default async function LegalPage() {
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8 text-base leading-7 text-slate-600">
         {lang === "zh" ? (
           <>
-            <p>
-              CleanClaw 是一个第三方清理工具，用于帮助用户扫描并删除本机中与 OpenClaw 相关的安装产物与残留项。
-            </p>
+            <p>CleanClaw 是一个第三方清理工具，用于帮助用户扫描并删除本机中与 OpenClaw 相关的安装产物与残留项。</p>
             <p className="mt-4">
               本工具不会在未展示命中项且未获得确认前执行删除操作。请在清理前核对结果，并自行承担因删除相关文件、服务或注册表项可能带来的影响。
             </p>

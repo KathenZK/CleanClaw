@@ -1,4 +1,5 @@
 import type { Lang } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/i18n";
 
 export const releaseUrl =
   process.env.NEXT_PUBLIC_RELEASES_URL ?? "https://github.com/KathenZK/CleanClaw/releases/tag/v0.1.0";
@@ -14,11 +15,11 @@ export const publishedLabel = "2026-03-10";
 
 export function getNavigation(lang: Lang) {
   return [
-    { href: "/", label: lang === "zh" ? "首页" : "Home" },
-    { href: "/download", label: lang === "zh" ? "下载" : "Download" },
-    { href: "/faq", label: "FAQ" },
-    { href: "/docs", label: lang === "zh" ? "清理说明" : "Docs" },
-    { href: "/legal", label: lang === "zh" ? "免责声明" : "Legal" },
+    { href: getLocalizedPath(lang, "/"), label: lang === "zh" ? "首页" : "Home" },
+    { href: getLocalizedPath(lang, "/download"), label: lang === "zh" ? "下载" : "Download" },
+    { href: getLocalizedPath(lang, "/faq"), label: "FAQ" },
+    { href: getLocalizedPath(lang, "/docs"), label: lang === "zh" ? "清理说明" : "Docs" },
+    { href: getLocalizedPath(lang, "/legal"), label: lang === "zh" ? "免责声明" : "Legal" },
   ] as const;
 }
 

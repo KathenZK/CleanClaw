@@ -1,7 +1,34 @@
-import { getRequestLang } from "@/lib/i18n";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getLocalizedMetadata } from "@/lib/seo";
+import { isLang, type Lang } from "@/lib/i18n";
 
-export default async function FaqPage() {
-  const lang = await getRequestLang();
+interface FaqPageProps {
+  params: Promise<{ lang: string }>;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const resolvedLang: Lang = isLang(lang) ? lang : "zh";
+
+  return getLocalizedMetadata(resolvedLang, {
+    title: resolvedLang === "zh" ? "CleanClaw 常见问题" : "CleanClaw FAQ",
+    description:
+      resolvedLang === "zh"
+        ? "查看 CleanClaw 的常见问题，包括支持系统、清理范围和清理报告。"
+        : "Read common questions about CleanClaw, including support, cleanup scope, and reporting.",
+    path: "/faq",
+  });
+}
+
+export default async function FaqPage({ params }: FaqPageProps) {
+  const { lang } = await params;
+  if (!isLang(lang)) notFound();
+
   const faqs =
     lang === "zh"
       ? [
