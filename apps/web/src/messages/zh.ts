@@ -35,7 +35,7 @@ export const zh = {
       "确认后开始清理，并在完成后生成一份可复查的结果列表。",
     ],
     principlesEyebrow: "为什么更放心",
-    principlesTitle: "每一步都尽量清楚，不把风险藏起来。",
+    principlesTitle: "每一步都清清楚楚。",
     principles: [
       {
         label: "先查看",

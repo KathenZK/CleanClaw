@@ -39,7 +39,7 @@ export const en: typeof zh = {
       "Clean only after confirmation, then keep a simple report you can review afterward.",
     ],
     principlesEyebrow: "Why it feels safer",
-    principlesTitle: "Every important action stays visible and understandable.",
+    principlesTitle: "Every step stays clear.",
     principles: [
       {
         label: "Review first",
