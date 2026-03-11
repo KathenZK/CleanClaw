@@ -25,6 +25,7 @@ export function getLocalizedMetadata(
       languages: {
         zh: toAbsolute(getLocalizedPath("zh", path)),
         en: toAbsolute(getLocalizedPath("en", path)),
+        "x-default": toAbsolute(getLocalizedPath("zh", path)),
       },
     },
     openGraph: {
@@ -34,11 +35,20 @@ export function getLocalizedMetadata(
       siteName: "CleanClaw",
       locale: lang === "zh" ? "zh_CN" : "en_US",
       type: "website",
+      images: [
+        {
+          url: `${siteUrl}/cleanclaw-og.png`,
+          width: 1024,
+          height: 1024,
+          alt: "CleanClaw brand image",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: options.title,
       description: options.description,
+      images: [`${siteUrl}/cleanclaw-og.png`],
     },
   };
 }
