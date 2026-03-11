@@ -46,7 +46,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     { href: getLocalizedPath(lang, "/"), label: messages.nav.home },
     { href: getLocalizedPath(lang, "/download"), label: messages.nav.download },
     { href: getLocalizedPath(lang, "/faq"), label: messages.nav.faq },
-    { href: getLocalizedPath(lang, "/docs"), label: messages.nav.docs },
     { href: getLocalizedPath(lang, "/legal"), label: messages.nav.legal },
   ] as const;
 

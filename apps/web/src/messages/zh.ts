@@ -6,8 +6,7 @@ export const zh = {
   nav: {
     home: "首页",
     download: "下载",
-    faq: "FAQ",
-    docs: "清理说明",
+    faq: "常见问题",
     legal: "免责声明",
   },
   language: {
@@ -29,7 +28,7 @@ export const zh = {
     detectableTitle: "可识别内容",
     detectableFooter: "从主程序到后台服务，命中项都会先展示出来。首版已提供 macOS 下载，Windows 版本即将提供。",
     processEyebrow: "使用方式",
-    processTitle: "三步完成清理，不需要额外学习成本。",
+    processTitle: "一键完成清理。",
     process: [
       "扫描设备中与 OpenClaw 相关的主程序、目录残留、缓存、日志、服务与注册表项。",
       "按类别展示命中结果，让你一眼看清哪些内容会被移除。",
@@ -132,6 +131,11 @@ export const zh = {
       {
         question: "会生成清理结果吗？",
         answer: "会。桌面端会生成一份结果列表，方便你核对哪些项目已经移除，哪些项目还需要手动处理。",
+      },
+      {
+        question: "使用流程是怎样的？",
+        answer:
+          "1. 打开桌面端并点击“开始扫描”。\n2. 查看按类别整理好的命中项列表。\n3. 在确认弹框中再次确认后开始清理。\n4. 清理结束后查看结果报告，确认哪些项目已移除。",
       },
     ],
   },

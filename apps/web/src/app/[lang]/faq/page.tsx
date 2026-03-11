@@ -40,7 +40,7 @@ export default async function FaqPage({ params }: FaqPageProps) {
       {faq.items.map((item) => (
         <article key={item.question} className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
           <h2 className="text-xl font-semibold text-slate-950">{item.question}</h2>
-          <p className="mt-3 text-base leading-7 text-slate-600">{item.answer}</p>
+          <p className="mt-3 whitespace-pre-line text-base leading-7 text-slate-600">{item.answer}</p>
         </article>
       ))}
     </main>

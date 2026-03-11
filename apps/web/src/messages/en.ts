@@ -9,7 +9,6 @@ export const en: typeof zh = {
     home: "Home",
     download: "Download",
     faq: "FAQ",
-    docs: "Docs",
     legal: "Legal",
   },
   language: {
@@ -33,7 +32,7 @@ export const en: typeof zh = {
     detectableFooter:
       "From app files to background services, every match is shown before cleanup. macOS is available now, and Windows is coming soon.",
     processEyebrow: "How it works",
-    processTitle: "Three steps, with no extra learning curve.",
+    processTitle: "Clean it up in one click.",
     process: [
       "Scan your device for OpenClaw app files, leftover directories, caches, logs, services, and registry entries.",
       "Show every match by category so it is immediately clear what will be removed.",
