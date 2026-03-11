@@ -38,53 +38,53 @@ export default async function HomePage({ params }: HomePageProps) {
   const principles = [
     lang === "zh"
       ? {
-          label: "先扫描",
-          title: "清理前先列出命中项",
-          description: "不会上来就删。先把路径、服务、自启动项和注册表残留列给你看，再由你确认。",
+          label: "先查看",
+          title: "清理前先把命中项列给你看",
+          description: "程序、目录、服务和注册表残留都会先展示出来，确认之后才会开始清理。",
         }
       : {
-          label: "Scan first",
-          title: "See every match before removal",
+          label: "Review first",
+          title: "See every matched item before cleanup",
           description:
-            "Nothing is removed immediately. CleanClaw lists paths, services, startup items, and registry leftovers first.",
+            "Programs, directories, services, and registry leftovers are listed first, then removed only after confirmation.",
         },
     lang === "zh"
       ? {
           label: "再确认",
-          title: "一次确认，避免误删",
-          description: "操作流程保持克制，不做复杂配置，也不把风险藏在高级选项里。",
+          title: "一步确认，减少误删风险",
+          description: "流程足够直接，不需要研究复杂设置，也不会把关键风险藏在深层选项里。",
         }
       : {
           label: "Confirm once",
-          title: "A restrained flow with fewer mistakes",
+          title: "A simple flow with fewer mistakes",
           description:
-            "The process stays simple. No dense settings panel, no hidden risk behind advanced options.",
+            "The flow stays simple. No dense settings screen, no important risk hidden behind advanced options.",
         },
     lang === "zh"
       ? {
-          label: "留结果",
-          title: "清理完成后给出结果报告",
-          description: "成功项与失败项都会保留在结果列表里，便于复查和继续处理。",
+          label: "可复查",
+          title: "清理完成后留下结果记录",
+          description: "成功项和失败项都会保留在结果里，方便复查，也方便继续手动处理少数异常项。",
         }
       : {
-          label: "Keep the result",
-          title: "Get a clear cleanup report afterward",
+          label: "Review later",
+          title: "Keep a clear result after cleanup",
           description:
-            "Successful and failed items stay in the result list so you can review what happened.",
+            "Successful and failed items stay in the result so you can review what changed afterward.",
         },
   ] as const;
 
   const process =
     lang === "zh"
       ? [
-          "扫描本机中的 OpenClaw 应用本体、目录残留、缓存、日志、服务与注册表项。",
-          "把命中项按类别分组展示，方便确认哪些内容会被移除。",
-          "用户确认后执行清理，并生成简单的结果报告。",
+          "扫描设备中与 OpenClaw 相关的主程序、目录残留、缓存、日志、服务与注册表项。",
+          "按类别展示命中结果，让你一眼看清哪些内容会被移除。",
+          "确认后开始清理，并在完成后生成一份可复查的结果列表。",
         ]
       : [
           "Scan your device for OpenClaw app files, leftover directories, caches, logs, services, and registry entries.",
-          "Group every match by category so it is clear what will be removed.",
-          "Run the cleanup only after confirmation, then generate a simple result report.",
+          "Show every match by category so it is immediately clear what will be removed.",
+          "Clean only after confirmation, then keep a simple report you can review afterward.",
         ];
 
   return (
@@ -97,15 +97,15 @@ export default async function HomePage({ params }: HomePageProps) {
             </span>
             <span>
               {lang === "zh"
-                ? "帮助你把 OpenClaw 及其残留从电脑里清干净。"
-                : "For users who want OpenClaw gone for good."}
+                ? "把 OpenClaw 及其残留从电脑里清干净。"
+                : "Built for people who want OpenClaw gone for good."}
             </span>
           </div>
 
           <div className="space-y-6">
             <p className="text-sm tracking-[0.18em] text-slate-500">CleanClaw.icu</p>
             <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-slate-950 md:text-7xl">
-              {lang === "zh" ? "一键彻底清理 OpenClaw" : "Remove OpenClaw completely"}
+              {lang === "zh" ? "彻底清理 OpenClaw，不留残留。" : "Remove OpenClaw cleanly, without leftovers."}
             </h1>
             <p className="max-w-[62ch] text-lg leading-8 text-slate-600 md:text-xl">
               {lang === "zh"
@@ -114,8 +114,8 @@ export default async function HomePage({ params }: HomePageProps) {
             </p>
             <p className="max-w-[62ch] text-base leading-7 text-slate-500">
               {lang === "zh"
-                ? "卸载软件最麻烦的地方，不是点删除，而是找出磁盘里还剩下什么、哪些后台项还在、以及哪些内容值得保留。CleanClaw 把这件事做得更直接。"
-                : "CleanClaw is built for the boring but important part of uninstalling software: finding what is still left on disk, showing it clearly, and letting you remove it deliberately."}
+                ? "卸载软件最麻烦的地方，从来不是点一下删除，而是确认系统里还剩下什么。CleanClaw 把这些残留找出来、列清楚，再交给你决定是否移除。"
+                : "The hard part of uninstalling software is not clicking remove. It is knowing what still remains on disk. CleanClaw finds those leftovers, shows them clearly, and lets you remove them with confidence."}
             </p>
           </div>
 
@@ -126,13 +126,13 @@ export default async function HomePage({ params }: HomePageProps) {
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-px hover:bg-slate-800"
             >
-              {lang === "zh" ? "下载 macOS 版" : "Download for macOS"}
+              {lang === "zh" ? "立即下载 macOS 版" : "Download for macOS"}
             </a>
             <Link
               href={`/${lang}/download`}
               className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:-translate-y-px hover:border-slate-300 hover:text-slate-950"
             >
-              {lang === "zh" ? "查看全部下载选项" : "View all download options"}
+              {lang === "zh" ? "查看下载方式" : "See download options"}
             </Link>
           </div>
         </div>
@@ -140,10 +140,10 @@ export default async function HomePage({ params }: HomePageProps) {
         <aside className="flex flex-col justify-between gap-8 rounded-3xl bg-[#eef2f6] p-7">
           <div className="space-y-3">
             <p className="text-sm tracking-[0.18em] text-slate-500">
-              {lang === "zh" ? "检查范围" : "What it checks"}
+              {lang === "zh" ? "可识别内容" : "What it can find"}
             </p>
             <div className="space-y-2">
-              {cleanupTargets.slice(0, 4).map((target, index) => (
+              {cleanupTargets.map((target, index) => (
                 <div
                   key={target}
                   className="rounded-2xl border border-white/80 bg-white/80 px-4 py-3 text-sm text-slate-700 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.28)]"
@@ -158,8 +158,8 @@ export default async function HomePage({ params }: HomePageProps) {
           <div className="border-t border-slate-200 pt-5">
             <p className="text-sm leading-7 text-slate-600">
               {lang === "zh"
-                ? "清理前会先展示命中项，并再次弹窗确认。首版支持 macOS，Windows 安装包正在补充中。"
-                : "Every match is shown before cleanup and confirmed again in a dialog. The first release supports macOS, and Windows is on the way."}
+                ? "从主程序到后台服务，命中项都会先展示出来。首版已提供 macOS 下载，Windows 版本即将提供。"
+                : "From app files to background services, every match is shown before cleanup. macOS is available now, and Windows is coming soon."}
             </p>
           </div>
         </aside>
@@ -168,10 +168,10 @@ export default async function HomePage({ params }: HomePageProps) {
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
         <article className="rounded-3xl bg-white p-8 shadow-[0_24px_70px_-45px_rgba(15,23,42,0.22)]">
           <p className="text-sm tracking-[0.18em] text-slate-500">
-            {lang === "zh" ? "工作方式" : "How it works"}
+            {lang === "zh" ? "使用方式" : "How it works"}
           </p>
           <h2 className="mt-5 max-w-md text-3xl font-semibold tracking-[-0.04em] text-slate-950">
-            {lang === "zh" ? "清理流程保持克制，而不是复杂。" : "A cleanup flow that stays restrained instead of complex."}
+            {lang === "zh" ? "三步完成清理，不需要额外学习成本。" : "Three steps, with no extra learning curve."}
           </h2>
           <div className="mt-8 space-y-6">
             {process.map((item, index) => (
@@ -186,10 +186,10 @@ export default async function HomePage({ params }: HomePageProps) {
         <article className="grid gap-4 rounded-3xl bg-[#f7f4ee] p-8">
           <div className="max-w-lg">
             <p className="text-sm tracking-[0.18em] text-slate-500">
-              {lang === "zh" ? "产品原则" : "Product principles"}
+              {lang === "zh" ? "为什么更放心" : "Why it feels safer"}
             </p>
             <h2 className="mt-5 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
-              {lang === "zh" ? "不抢戏，但把该说明的内容说明白。" : "It stays quiet, but it explains the important parts clearly."}
+              {lang === "zh" ? "每一步都尽量清楚，不把风险藏起来。" : "Every important action stays visible and understandable."}
             </h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
@@ -209,30 +209,6 @@ export default async function HomePage({ params }: HomePageProps) {
         </article>
       </section>
 
-      <section className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
-        <div className="pt-2">
-          <p className="text-sm tracking-[0.18em] text-slate-500">
-            {lang === "zh" ? "覆盖范围" : "Coverage"}
-          </p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-slate-950">
-            {lang === "zh"
-              ? "首版聚焦把 OpenClaw 残留清理干净。"
-              : "The first release focuses on cleaning up OpenClaw thoroughly."}
-          </h2>
-        </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          {cleanupTargets.map((target, index) => (
-            <div
-              key={target}
-              className={`rounded-3xl border border-slate-200 bg-white px-5 py-5 text-sm leading-7 text-slate-700 ${
-                index === cleanupTargets.length - 1 ? "md:col-span-2 md:mr-20" : ""
-              }`}
-            >
-              {target}
-            </div>
-          ))}
-        </div>
-      </section>
     </main>
   );
 }

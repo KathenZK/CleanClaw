@@ -19,8 +19,8 @@ export async function generateMetadata({
     title: resolvedLang === "zh" ? "CleanClaw 常见问题" : "CleanClaw FAQ",
     description:
       resolvedLang === "zh"
-        ? "查看 CleanClaw 的常见问题，包括支持系统、清理范围和清理报告。"
-        : "Read common questions about CleanClaw, including support, cleanup scope, and reporting.",
+        ? "查看 CleanClaw 的常见问题，包括支持系统、清理范围、确认方式和结果报告。"
+        : "Read common questions about CleanClaw, including supported systems, cleanup scope, confirmation, and reports.",
     path: "/faq",
   });
 }
@@ -34,37 +34,37 @@ export default async function FaqPage({ params }: FaqPageProps) {
       ? [
           {
             question: "它会先扫描再删除吗？",
-            answer: "会。CleanClaw 会先展示命中的 OpenClaw 项，用户确认后才执行清理。",
+            answer: "会。CleanClaw 会先展示命中的 OpenClaw 项，只有在你确认之后才会开始清理。",
           },
           {
             question: "会清理哪些内容？",
-            answer: "应用本体、.openclaw 目录、配置、缓存、日志、自启动、后台服务，以及 Windows 注册表相关项。",
+            answer: "包括应用本体、`.openclaw` 目录、配置、缓存、日志、自启动项、后台服务，以及 Windows 注册表相关项。",
           },
           {
             question: "支持哪些系统？",
-            answer: "首版支持 macOS 和 Windows。",
+            answer: "当前版本提供 macOS 安装包，Windows 版本正在整理与发布中。",
           },
           {
             question: "会生成清理结果吗？",
-            answer: "会。桌面端会生成一份简单列表格式的清理报告，便于用户核对结果。",
+            answer: "会。桌面端会生成一份结果列表，方便你核对哪些项目已经移除，哪些项目还需要手动处理。",
           },
         ]
       : [
           {
             question: "Does it scan before deleting?",
-            answer: "Yes. CleanClaw shows all matched OpenClaw items first and only cleans them after confirmation.",
+            answer: "Yes. CleanClaw shows all matched OpenClaw items first and only starts cleaning after you confirm.",
           },
           {
             question: "What does it remove?",
-            answer: "Application files, the `.openclaw` directory, configuration, cache, logs, startup items, background services, and related Windows registry entries.",
+            answer: "It covers application files, the `.openclaw` directory, configuration, cache, logs, startup items, background services, and related Windows registry entries.",
           },
           {
             question: "Which systems are supported?",
-            answer: "The first release supports macOS and Windows.",
+            answer: "The current release includes a macOS installer. Windows support is being prepared for release.",
           },
           {
             question: "Will it generate a cleanup report?",
-            answer: "Yes. The desktop app generates a simple cleanup report so you can review the result afterward.",
+            answer: "Yes. The desktop app keeps a result list so you can review what was removed and what may still need manual attention.",
           },
         ];
 

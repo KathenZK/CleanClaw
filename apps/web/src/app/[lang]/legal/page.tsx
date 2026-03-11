@@ -19,8 +19,8 @@ export async function generateMetadata({
     title: resolvedLang === "zh" ? "CleanClaw 隐私与免责声明" : "CleanClaw privacy and disclaimer",
     description:
       resolvedLang === "zh"
-        ? "查看 CleanClaw 的隐私说明、免责声明以及清理前确认提示。"
-        : "Read the CleanClaw privacy note, disclaimer, and cleanup confirmation guidance.",
+        ? "查看 CleanClaw 的隐私说明、免责声明，以及清理前的确认提示。"
+        : "Read the CleanClaw privacy notice, disclaimer, and confirmation guidance before cleanup.",
     path: "/legal",
   });
 }
@@ -42,10 +42,10 @@ export default async function LegalPage({ params }: LegalPageProps) {
           <>
             <p>CleanClaw 是一个第三方清理工具，用于帮助用户扫描并删除本机中与 OpenClaw 相关的安装产物与残留项。</p>
             <p className="mt-4">
-              本工具不会在未展示命中项且未获得确认前执行删除操作。请在清理前核对结果，并自行承担因删除相关文件、服务或注册表项可能带来的影响。
+              本工具不会在未展示命中项且未获得确认前执行删除操作。请在清理前核对结果，并理解删除相关文件、服务或注册表项可能带来的影响。
             </p>
             <p className="mt-4">
-              首版不采集账号数据，也不要求登录。若未来引入统计或错误上报，官网应同步补充相应隐私说明。
+              当前版本不要求登录，也不采集账号信息。若后续引入统计或错误上报，官网会同步更新相应的隐私说明。
             </p>
           </>
         ) : (
@@ -57,7 +57,7 @@ export default async function LegalPage({ params }: LegalPageProps) {
               Nothing is deleted until matched items are shown and confirmed. Please review the results carefully before cleanup and understand the impact of removing related files, services, or registry entries.
             </p>
             <p className="mt-4">
-              The first release does not require login and does not collect account data. If telemetry or error reporting is added later, the site should be updated with a matching privacy notice.
+              The current release does not require login and does not collect account data. If telemetry or error reporting is added later, the website will be updated with a matching privacy notice.
             </p>
           </>
         )}

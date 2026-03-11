@@ -20,8 +20,8 @@ export async function generateMetadata({
     title: resolvedLang === "zh" ? "CleanClaw 清理说明" : "CleanClaw cleanup guide",
     description:
       resolvedLang === "zh"
-        ? "了解 CleanClaw 的扫描范围、确认流程和清理报告。"
-        : "Learn about CleanClaw coverage, confirmation flow, and cleanup reporting.",
+        ? "了解 CleanClaw 会扫描哪些内容、如何确认，以及清理完成后会留下什么结果。"
+        : "Learn what CleanClaw scans, how confirmation works, and what result is kept after cleanup.",
     path: "/docs",
   });
 }
@@ -40,8 +40,8 @@ export default async function DocsPage({ params }: DocsPageProps) {
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
           {lang === "zh"
-            ? "CleanClaw 只对明确识别为 OpenClaw 的路径、任务、服务和注册表项执行操作，不做模糊关键词全盘扫描。"
-            : "CleanClaw only acts on paths, tasks, services, and registry entries that can be clearly identified as OpenClaw leftovers."}
+            ? "CleanClaw 只处理能够明确识别为 OpenClaw 相关的路径、服务、任务和注册表项，不会用模糊关键词在系统里胡乱匹配。"
+            : "CleanClaw only removes paths, services, tasks, and registry entries that can be clearly identified as related to OpenClaw. It does not rely on vague keyword matching."}
         </p>
       </section>
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
@@ -60,16 +60,16 @@ export default async function DocsPage({ params }: DocsPageProps) {
           {lang === "zh" ? (
             <>
               <li>1. 打开桌面端并点击“开始扫描”。</li>
-              <li>2. 查看命中项列表。</li>
-              <li>3. 在确认弹框中再次确认。</li>
-              <li>4. 清理完成后查看简单报告列表。</li>
+              <li>2. 查看按类别整理好的命中项列表。</li>
+              <li>3. 在确认弹框中再次确认后开始清理。</li>
+              <li>4. 清理结束后查看结果报告，确认哪些项目已移除。</li>
             </>
           ) : (
             <>
               <li>1. Open the desktop app and click “Start scan”.</li>
-              <li>2. Review the matched items.</li>
-              <li>3. Confirm again in the confirmation dialog.</li>
-              <li>4. Review the simple result report after cleanup.</li>
+              <li>2. Review the matched items grouped by category.</li>
+              <li>3. Confirm again in the dialog before cleanup begins.</li>
+              <li>4. Review the result report to see what was removed.</li>
             </>
           )}
         </ol>

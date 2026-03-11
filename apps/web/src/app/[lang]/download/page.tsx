@@ -20,8 +20,8 @@ export async function generateMetadata({
     title: resolvedLang === "zh" ? "下载 CleanClaw" : "Download CleanClaw",
     description:
       resolvedLang === "zh"
-        ? "获取 CleanClaw 的最新安装包。当前提供 macOS 版本，Windows 版本即将提供。"
-        : "Download the latest CleanClaw installer. macOS is available now and Windows is coming soon.",
+        ? "获取 CleanClaw 最新安装包。当前提供 macOS 版本，Windows 版本即将提供。"
+        : "Get the latest CleanClaw installer. macOS is available now and Windows is coming soon.",
     path: "/download",
   });
 }
@@ -41,8 +41,8 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
           {lang === "zh"
-            ? "安装包通过 GitHub Releases 分发。打开应用后先扫描命中项，再确认清理，并在完成后生成简单报告。"
-            : "Installers are distributed through GitHub Releases. The app scans first, asks for confirmation, then generates a simple report after cleanup."}
+            ? "选择适合你设备的安装包，打开后即可开始扫描 OpenClaw 残留，并在确认后完成清理。"
+            : "Choose the installer for your device, launch the app, scan for OpenClaw leftovers, and clean them after confirmation."}
         </p>
         <div className="mt-8 flex flex-wrap gap-3 text-sm text-slate-500">
           <span className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2">
@@ -79,11 +79,11 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
       </section>
 
       <section className="rounded-[1.5rem] border border-slate-200 bg-white p-8">
-        <h2 className="text-xl font-semibold text-slate-950">{lang === "zh" ? "Release 页面" : "Release notes"}</h2>
+        <h2 className="text-xl font-semibold text-slate-950">{lang === "zh" ? "版本与发布说明" : "Versions and release notes"}</h2>
         <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">
           {lang === "zh"
-            ? "需要查看完整发布说明、后续版本或手动下载资产时，可以前往 GitHub Releases 页面。"
-            : "For full release notes, later versions, or manual asset downloads, visit the GitHub Releases page."}
+            ? "如果你想查看历史版本、发布说明，或手动下载所有安装包，可以前往 GitHub Release 页面。"
+            : "If you want release notes, older versions, or manual access to all installers, visit the GitHub release page."}
         </p>
         <a
           href={releaseUrl}
@@ -91,7 +91,7 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
           rel="noreferrer"
           className="mt-6 inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950"
         >
-          {lang === "zh" ? "查看 Release 页面" : "Open release page"}
+          {lang === "zh" ? "查看 GitHub Release" : "Open GitHub release"}
         </a>
       </section>
     </main>
