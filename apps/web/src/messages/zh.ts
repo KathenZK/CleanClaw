@@ -92,23 +92,6 @@ export const zh = {
     releaseBody: "如果你想查看历史版本、发布说明，或手动下载所有安装包，可以前往 GitHub Release 页面。",
     releaseCta: "查看 GitHub Release",
   },
-  docs: {
-    metadata: {
-      title: "CleanClaw 清理说明",
-      description: "了解 CleanClaw 会扫描哪些内容、如何确认，以及清理完成后会留下什么结果。",
-    },
-    eyebrow: "说明",
-    title: "清理说明",
-    lead: "CleanClaw 只处理能够明确识别为 OpenClaw 相关的路径、服务、任务和注册表项，不会用模糊关键词在系统里胡乱匹配。",
-    coverageTitle: "当前扫描范围",
-    flowTitle: "使用流程",
-    flow: [
-      "打开桌面端并点击“开始扫描”。",
-      "查看按类别整理好的命中项列表。",
-      "在确认弹框中再次确认后开始清理。",
-      "清理结束后查看结果报告，确认哪些项目已移除。",
-    ],
-  },
   faq: {
     metadata: {
       title: "CleanClaw 常见问题",

@@ -96,23 +96,6 @@ export const en: typeof zh = {
     releaseBody: "If you want release notes, older versions, or manual access to all installers, visit the GitHub release page.",
     releaseCta: "Open GitHub release",
   },
-  docs: {
-    metadata: {
-      title: "CleanClaw cleanup guide",
-      description: "Learn what CleanClaw scans, how confirmation works, and what result is kept after cleanup.",
-    },
-    eyebrow: "Docs",
-    title: "Cleanup guide",
-    lead: "CleanClaw only removes paths, services, tasks, and registry entries that can be clearly identified as related to OpenClaw. It does not rely on vague keyword matching.",
-    coverageTitle: "Current coverage",
-    flowTitle: "How to use it",
-    flow: [
-      "Open the desktop app and click “Start scan”.",
-      "Review the matched items grouped by category.",
-      "Confirm again in the dialog before cleanup begins.",
-      "Review the result report to see what was removed.",
-    ],
-  },
   faq: {
     metadata: {
       title: "CleanClaw FAQ",
