@@ -8,3 +8,4 @@ const api: CleanClawApi = {
 };
 
 contextBridge.exposeInMainWorld("cleanClaw", api);
+contextBridge.exposeInMainWorld("__cleanClawPreloadReady", true);
