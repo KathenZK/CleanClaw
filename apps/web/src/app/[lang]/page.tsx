@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { currentVersion, macDownloadUrl } from "@/lib/site";
+import { macDownloadUrl } from "@/lib/site";
 import { getLocalizedMetadata } from "@/lib/seo";
 import { isLang, type Lang } from "@/lib/i18n";
 import { getMessages } from "@/lib/messages";
@@ -39,14 +39,7 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-28 pt-6 lg:px-10">
       <section className="grid gap-10 border-t border-slate-200 pt-8 lg:grid-cols-[minmax(0,1.25fr)_22rem] lg:gap-16 lg:pt-12">
-        <div className="space-y-8">
-          <div className="flex flex-wrap items-center gap-3 text-base text-slate-500">
-            <span className="rounded-full border border-slate-200 bg-white px-4 py-2">
-              {messages.site.brand} {currentVersion}
-            </span>
-            <span>{home.versionBadgeSuffix}</span>
-          </div>
-
+        <div className="space-y-6">
           <div className="space-y-6">
             <p className="text-sm tracking-[0.18em] text-slate-500">{home.eyebrow}</p>
             <h1 className="max-w-4xl text-5xl font-semibold tracking-[-0.06em] text-slate-950 md:text-7xl">
