@@ -4,6 +4,8 @@ import Script from "next/script";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "../globals.css";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { getLocalizedMetadata } from "@/lib/seo";
@@ -92,6 +94,8 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
             </div>
           </footer>
         </div>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
