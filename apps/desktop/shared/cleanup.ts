@@ -32,6 +32,8 @@ export interface CleanupTarget {
   registryValueName?: string;
 }
 
+import type { Lang } from "./i18n";
+
 export interface ScanResult {
   platform: AppPlatform;
   scannedAt: string;
@@ -52,17 +54,6 @@ export interface CleanupResult {
 
 export interface CleanClawApi {
   getPlatform: () => Promise<AppPlatform>;
-  scan: () => Promise<ScanResult>;
-  clean: (items: CleanupTarget[]) => Promise<CleanupResult>;
+  scan: (lang: Lang) => Promise<ScanResult>;
+  clean: (items: CleanupTarget[], lang: Lang) => Promise<CleanupResult>;
 }
-
-export const categoryLabels: Record<TargetCategory, string> = {
-  app: "应用本体",
-  state: "状态目录",
-  config: "配置",
-  cache: "缓存",
-  logs: "日志",
-  startup: "自启动",
-  service: "后台服务",
-  registry: "注册表",
-};

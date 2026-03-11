@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import type { Event, RenderProcessGoneDetails } from "electron";
 import { cleanTargets, formatReport, scanOpenClaw } from "./openclaw";
 import type { AppPlatform, CleanupTarget } from "../shared/cleanup";
+import type { Lang } from "../shared/i18n";
 
 declare const MAIN_WINDOW_VITE_DEV_SERVER_URL: string | undefined;
 
@@ -151,16 +152,16 @@ async function createWindow() {
 
 ipcMain.handle("cleanclaw:get-platform", async () => getPlatform());
 
-ipcMain.handle("cleanclaw:scan", async () => scanOpenClaw());
+ipcMain.handle("cleanclaw:scan", async (_event, lang: Lang) => scanOpenClaw(lang));
 
-ipcMain.handle("cleanclaw:clean", async (_event, items: CleanupTarget[]) => {
-  const results = await cleanTargets(items);
+ipcMain.handle("cleanclaw:clean", async (_event, items: CleanupTarget[], lang: Lang) => {
+  const results = await cleanTargets(items, lang);
   const reportPath = path.join(
     app.getPath("desktop"),
     `CleanClaw-Report-${new Date().toISOString().replace(/[:.]/g, "-")}.txt`,
   );
 
-  await fs.writeFile(reportPath, formatReport(results), "utf8");
+  await fs.writeFile(reportPath, formatReport(results, lang), "utf8");
 
   return {
     finishedAt: new Date().toISOString(),

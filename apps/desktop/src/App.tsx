@@ -1,22 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CleanupResult, ScanResult } from "../shared/cleanup";
-import { categoryLabels } from "../shared/cleanup";
+import { getMessages } from "../shared/messages";
+import { normalizeLang } from "../shared/i18n";
 import "./App.css";
 
 const supportedPlatforms = new Set(["darwin", "win32"]);
 
-function formatTimestamp(value?: string) {
+function formatTimestamp(value: string | undefined, lang: "zh" | "en", fallback: string) {
   if (!value) {
-    return "Not available";
+    return fallback;
   }
 
-  return new Intl.DateTimeFormat(undefined, {
+  return new Intl.DateTimeFormat(lang === "zh" ? "zh-CN" : "en-US", {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(new Date(value));
 }
 
 function App() {
+  const lang = normalizeLang(globalThis.navigator?.language);
+  const messages = getMessages(lang);
   const [platform, setPlatform] = useState<string>("unknown");
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
@@ -27,7 +30,7 @@ function App() {
 
   useEffect(() => {
     if (!window.cleanClaw) {
-      setError("Desktop bridge is unavailable. Please reinstall CleanClaw.");
+      setError(messages.errors.bridgeUnavailable);
       setPlatform("unknown");
       return;
     }
@@ -37,9 +40,9 @@ function App() {
       .then((value) => setPlatform(value))
       .catch(() => {
         setPlatform("unknown");
-        setError("Failed to connect to the desktop runtime.");
+        setError(messages.errors.runtimeUnavailable);
       });
-  }, []);
+  }, [messages.errors.bridgeUnavailable, messages.errors.runtimeUnavailable]);
 
   const groupedItems = useMemo(() => {
     const items = scanResult?.items ?? [];
@@ -52,12 +55,14 @@ function App() {
     );
   }, [scanResult]);
 
+  const categoryLabels = messages.categoryLabels;
+
   const canScan = !isScanning && !isCleaning && supportedPlatforms.has(platform);
   const canClean = !isCleaning && Boolean(scanResult?.items.length);
 
   const handleScan = async () => {
     if (!window.cleanClaw) {
-      setError("Desktop bridge is unavailable. Please reinstall CleanClaw.");
+      setError(messages.errors.bridgeUnavailable);
       return;
     }
 
@@ -66,10 +71,10 @@ function App() {
     setIsScanning(true);
 
     try {
-      const result = await window.cleanClaw.scan();
+      const result = await window.cleanClaw.scan(lang);
       setScanResult(result);
     } catch (scanError) {
-      setError(scanError instanceof Error ? scanError.message : "Scan failed.");
+      setError(scanError instanceof Error ? scanError.message : messages.errors.scanFailed);
     } finally {
       setIsScanning(false);
     }
@@ -77,7 +82,7 @@ function App() {
 
   const handleClean = async () => {
     if (!window.cleanClaw) {
-      setError("Desktop bridge is unavailable. Please reinstall CleanClaw.");
+      setError(messages.errors.bridgeUnavailable);
       return;
     }
 
@@ -90,10 +95,10 @@ function App() {
     setShowConfirm(false);
 
     try {
-      const result = await window.cleanClaw.clean(scanResult.items);
+      const result = await window.cleanClaw.clean(scanResult.items, lang);
       setCleanupResult(result);
     } catch (cleanupError) {
-      setError(cleanupError instanceof Error ? cleanupError.message : "Cleanup failed.");
+      setError(cleanupError instanceof Error ? cleanupError.message : messages.errors.cleanupFailed);
     } finally {
       setIsCleaning(false);
     }
@@ -104,42 +109,40 @@ function App() {
       <div className="hero">
         <div>
           <p className="eyebrow">CleanClaw</p>
-          <h1>一键彻底清理 OpenClaw</h1>
-          <p className="subtitle">
-            扫描命中项，确认后删除。Scan first, confirm once, remove OpenClaw leftovers cleanly.
-          </p>
+          <h1>{messages.app.title}</h1>
+          <p className="subtitle">{messages.app.subtitle}</p>
         </div>
         <div className="hero-meta">
           <div>
-            <span className="meta-label">Platform</span>
+            <span className="meta-label">{messages.app.platform}</span>
             <strong>{platform}</strong>
           </div>
           <div>
-            <span className="meta-label">Last scan</span>
-            <strong>{formatTimestamp(scanResult?.scannedAt)}</strong>
+            <span className="meta-label">{messages.app.lastScan}</span>
+            <strong>{formatTimestamp(scanResult?.scannedAt, lang, messages.app.unavailable)}</strong>
           </div>
         </div>
       </div>
 
       <div className="actions">
         <button className="primary-button" disabled={!canScan} onClick={() => void handleScan()}>
-          {isScanning ? "扫描中 Scanning..." : "开始扫描"}
+          {isScanning ? messages.app.scanning : messages.app.startScan}
         </button>
         <button className="secondary-button" disabled={!canClean} onClick={() => setShowConfirm(true)}>
-          确认清理
+          {messages.app.confirmCleanup}
         </button>
       </div>
 
       {!supportedPlatforms.has(platform) ? (
         <section className="panel">
-          <h2>暂不支持当前系统</h2>
-          <p>Current MVP supports macOS and Windows only.</p>
+          <h2>{messages.app.unsupportedTitle}</h2>
+          <p>{messages.app.unsupportedBody}</p>
         </section>
       ) : null}
 
       {error ? (
         <section className="panel error-panel">
-          <h2>发生错误</h2>
+          <h2>{messages.app.errorTitle}</h2>
           <p>{error}</p>
         </section>
       ) : null}
@@ -147,19 +150,21 @@ function App() {
       <section className="panel">
         <div className="panel-header">
           <div>
-            <h2>扫描结果</h2>
-            <p>Found items are grouped by category before cleanup.</p>
+            <h2>{messages.app.resultsTitle}</h2>
+            <p>{messages.app.resultsBody}</p>
           </div>
-          <span className="badge">{scanResult?.items.length ?? 0} items</span>
+          <span className="badge">
+            {scanResult?.items.length ?? 0} {messages.app.itemsSuffix}
+          </span>
         </div>
 
         {!scanResult ? (
           <div className="empty-state">
-            <p>点击“开始扫描”以查看本机中命中的 OpenClaw 项。</p>
+            <p>{messages.app.emptyBeforeScan}</p>
           </div>
         ) : scanResult.items.length === 0 ? (
           <div className="empty-state">
-            <p>未发现明确命中的 OpenClaw 残留。</p>
+            <p>{messages.app.emptyAfterScan}</p>
           </div>
         ) : (
           <div className="group-list">
@@ -190,10 +195,12 @@ function App() {
         <section className="panel">
           <div className="panel-header">
             <div>
-              <h2>清理报告</h2>
-              <p>Simple cleanup list generated after the operation.</p>
+              <h2>{messages.app.reportTitle}</h2>
+              <p>{messages.app.reportBody}</p>
             </div>
-            <span className="badge">{cleanupResult.items.filter((item) => item.success).length} success</span>
+            <span className="badge">
+              {cleanupResult.items.filter((item) => item.success).length} {messages.app.successSuffix}
+            </span>
           </div>
           <div className="report-list">
             {cleanupResult.items.map((item) => (
@@ -205,7 +212,7 @@ function App() {
           </div>
           {cleanupResult.reportPath ? (
             <p className="report-path">
-              报告已写入 Report saved to: <code>{cleanupResult.reportPath}</code>
+              {messages.app.reportSaved} <code>{cleanupResult.reportPath}</code>
             </p>
           ) : null}
         </section>
@@ -214,16 +221,16 @@ function App() {
       {showConfirm ? (
         <div className="modal-backdrop" role="presentation">
           <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
-            <h2 id="confirm-title">确认清理</h2>
+            <h2 id="confirm-title">{messages.app.confirmTitle}</h2>
             <p>
-              将删除 {scanResult?.items.length ?? 0} 个命中项，包括目录、服务、自启动项与注册表残留。
+              {messages.app.confirmBodyPrefix} {scanResult?.items.length ?? 0} {messages.app.confirmBodySuffix}
             </p>
             <div className="modal-actions">
               <button className="secondary-button" onClick={() => setShowConfirm(false)}>
-                取消
+                {messages.app.cancel}
               </button>
               <button className="primary-button" disabled={isCleaning} onClick={() => void handleClean()}>
-                {isCleaning ? "清理中..." : "确认删除"}
+                {isCleaning ? messages.app.cleaning : messages.app.confirmDelete}
               </button>
             </div>
           </div>

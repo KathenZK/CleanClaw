@@ -43,9 +43,9 @@
 }
 
 .hero h1 {
-  max-width: 12ch;
-  font-size: clamp(40px, 6vw, 72px);
-  line-height: 0.98;
+  max-width: 14ch;
+  font-size: clamp(36px, 5vw, 60px);
+  line-height: 1.02;
 }
 
 .subtitle {

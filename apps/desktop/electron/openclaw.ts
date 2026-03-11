@@ -4,6 +4,8 @@ import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
 import type { AppPlatform, CleanupReportItem, CleanupTarget, ScanResult } from "../shared/cleanup";
+import type { Lang } from "../shared/i18n";
+import { getMessages } from "../shared/messages";
 
 const execFileAsync = promisify(execFile);
 
@@ -60,14 +62,15 @@ async function queryRegistryValue(registryPath: string, valueName: string) {
   }
 }
 
-async function scanMacPaths() {
+async function scanMacPaths(lang: Lang) {
+  const messages = getMessages(lang);
   const home = os.homedir();
   const library = path.join(home, "Library");
   const candidates: CleanupTarget[] = [
     {
       id: targetId(["application", "/Applications/OpenClaw.app"]),
       label: "OpenClaw.app",
-      description: "OpenClaw macOS 应用本体",
+      description: messages.scan.applicationBundle,
       category: "app",
       kind: "application",
       path: "/Applications/OpenClaw.app",
@@ -75,7 +78,7 @@ async function scanMacPaths() {
     {
       id: targetId(["directory", path.join(home, ".openclaw")]),
       label: "~/.openclaw",
-      description: "默认状态与工作目录",
+      description: messages.scan.stateDirectory,
       category: "state",
       kind: "directory",
       path: path.join(home, ".openclaw"),
@@ -83,7 +86,7 @@ async function scanMacPaths() {
     {
       id: targetId(["directory", path.join(library, "Application Support", "OpenClaw")]),
       label: "Application Support",
-      description: "Application Support/OpenClaw",
+      description: messages.scan.applicationSupport,
       category: "config",
       kind: "directory",
       path: path.join(library, "Application Support", "OpenClaw"),
@@ -91,7 +94,7 @@ async function scanMacPaths() {
     {
       id: targetId(["directory", path.join(library, "Caches", "OpenClaw")]),
       label: "OpenClaw cache",
-      description: "Library/Caches/OpenClaw",
+      description: messages.scan.cacheDirectory,
       category: "cache",
       kind: "directory",
       path: path.join(library, "Caches", "OpenClaw"),
@@ -99,7 +102,7 @@ async function scanMacPaths() {
     {
       id: targetId(["directory", path.join(library, "Logs", "OpenClaw")]),
       label: "OpenClaw logs",
-      description: "Library/Logs/OpenClaw",
+      description: messages.scan.logsDirectory,
       category: "logs",
       kind: "directory",
       path: path.join(library, "Logs", "OpenClaw"),
@@ -116,7 +119,7 @@ async function scanMacPaths() {
     (entryPath, entryName) => ({
       id: targetId(["directory", entryPath]),
       label: entryName,
-      description: "OpenClaw profile 状态目录",
+      description: messages.scan.profileState,
       category: "state",
       kind: "directory",
       path: entryPath,
@@ -132,7 +135,7 @@ async function scanMacPaths() {
     (entryPath, entryName) => ({
       id: targetId(["launch-agent", entryPath]),
       label: entryName,
-      description: "LaunchAgent 与后台服务入口",
+      description: messages.scan.launchAgent,
       category: "service",
       kind: "launch-agent",
       path: entryPath,
@@ -147,7 +150,7 @@ async function scanMacPaths() {
     (entryPath, entryName) => ({
       id: targetId(["file", entryPath]),
       label: entryName,
-      description: "Preference plist",
+      description: messages.scan.preferenceFile,
       category: "config",
       kind: "file",
       path: entryPath,
@@ -157,7 +160,8 @@ async function scanMacPaths() {
   return [...matches.filter(Boolean), ...profileDirs, ...launchAgents, ...preferences] as CleanupTarget[];
 }
 
-async function scanWindowsTasks(): Promise<CleanupTarget[]> {
+async function scanWindowsTasks(lang: Lang): Promise<CleanupTarget[]> {
+  const messages = getMessages(lang);
   const output = await queryCommand("schtasks", ["/Query", "/FO", "CSV", "/NH"]);
   if (!output) {
     return [];
@@ -174,14 +178,15 @@ async function scanWindowsTasks(): Promise<CleanupTarget[]> {
   return taskNames.map((taskName) => ({
       id: targetId(["scheduled-task", taskName]),
       label: taskName,
-      description: "Windows Scheduled Task",
+      description: messages.scan.windowsTask,
       category: "service" as const,
       kind: "scheduled-task" as const,
       taskName,
     }));
 }
 
-async function scanWindowsRegistry() {
+async function scanWindowsRegistry(lang: Lang) {
+  const messages = getMessages(lang);
   const registryTargets: CleanupTarget[] = [];
   const keys = [
     "HKCU\\Software\\OpenClaw",
@@ -195,7 +200,7 @@ async function scanWindowsRegistry() {
       registryTargets.push({
         id: targetId(["registry-key", registryPath]),
         label: registryPath,
-        description: "OpenClaw 注册表项",
+        description: messages.scan.registryKey,
         category: "registry",
         kind: "registry-key",
         registryPath,
@@ -213,7 +218,7 @@ async function scanWindowsRegistry() {
       registryTargets.push({
         id: targetId(["registry-value", item.registryPath, item.valueName]),
         label: `${item.registryPath} -> ${item.valueName}`,
-        description: "OpenClaw 自启动注册表值",
+        description: messages.scan.startupRegistryValue,
         category: "startup",
         kind: "registry-value",
         registryPath: item.registryPath,
@@ -225,32 +230,33 @@ async function scanWindowsRegistry() {
   return registryTargets;
 }
 
-async function scanWindowsPaths() {
+async function scanWindowsPaths(lang: Lang) {
+  const messages = getMessages(lang);
   const home = os.homedir();
   const localAppData = process.env.LOCALAPPDATA;
   const roamingAppData = process.env.APPDATA;
   const candidates = [
     {
       label: "%USERPROFILE%\\.openclaw",
-      description: "默认状态与工作目录",
+      description: messages.scan.stateDirectory,
       category: "state" as const,
       path: path.join(home, ".openclaw"),
     },
     {
       label: "%LOCALAPPDATA%\\OpenClaw",
-      description: "Local AppData/OpenClaw",
+      description: messages.scan.windowsLocalAppData,
       category: "config" as const,
       path: localAppData ? path.join(localAppData, "OpenClaw") : undefined,
     },
     {
       label: "%APPDATA%\\OpenClaw",
-      description: "Roaming AppData/OpenClaw",
+      description: messages.scan.windowsRoamingAppData,
       category: "config" as const,
       path: roamingAppData ? path.join(roamingAppData, "OpenClaw") : undefined,
     },
     {
       label: "%LOCALAPPDATA%\\Programs\\OpenClaw",
-      description: "Programs/OpenClaw",
+      description: messages.scan.windowsPrograms,
       category: "app" as const,
       path: localAppData ? path.join(localAppData, "Programs", "OpenClaw") : undefined,
     },
@@ -277,20 +283,20 @@ async function scanWindowsPaths() {
     (entryPath, entryName) => ({
       id: targetId(["directory", entryPath]),
       label: entryName,
-      description: "OpenClaw profile 状态目录",
+      description: messages.scan.profileState,
       category: "state",
       kind: "directory",
       path: entryPath,
     }),
   );
 
-  const tasks = await scanWindowsTasks();
-  const registry = await scanWindowsRegistry();
+  const tasks = await scanWindowsTasks(lang);
+  const registry = await scanWindowsRegistry(lang);
 
   return [...results, ...profiles, ...tasks, ...registry];
 }
 
-export async function scanOpenClaw(): Promise<ScanResult> {
+export async function scanOpenClaw(lang: Lang): Promise<ScanResult> {
   const platform: AppPlatform =
     process.platform === "darwin" || process.platform === "win32" || process.platform === "linux"
       ? process.platform
@@ -298,9 +304,9 @@ export async function scanOpenClaw(): Promise<ScanResult> {
   let items: CleanupTarget[] = [];
 
   if (platform === "darwin") {
-    items = await scanMacPaths();
+    items = await scanMacPaths(lang);
   } else if (platform === "win32") {
-    items = await scanWindowsPaths();
+    items = await scanWindowsPaths(lang);
   }
 
   return {
@@ -318,7 +324,8 @@ async function runCommand(command: string, args: string[]) {
   await execFileAsync(command, args, { windowsHide: true });
 }
 
-export async function cleanTargets(items: CleanupTarget[]) {
+export async function cleanTargets(items: CleanupTarget[], lang: Lang) {
+  const messages = getMessages(lang);
   const results: CleanupReportItem[] = [];
 
   for (const item of items) {
@@ -373,10 +380,10 @@ export async function cleanTargets(items: CleanupTarget[]) {
       results.push({
         target: item,
         success: true,
-        message: "Removed successfully.",
+        message: messages.report.removedSuccessfully,
       });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Unknown cleanup error.";
+      const message = error instanceof Error ? error.message : messages.report.unknownCleanupError;
       results.push({
         target: item,
         success: false,
@@ -388,18 +395,19 @@ export async function cleanTargets(items: CleanupTarget[]) {
   return results;
 }
 
-export function formatReport(items: CleanupReportItem[]) {
+export function formatReport(items: CleanupReportItem[], lang: Lang) {
+  const messages = getMessages(lang);
   const lines = [
-    "CleanClaw Report",
-    `Generated: ${new Date().toISOString()}`,
+    messages.report.title,
+    `${messages.report.generatedAt}: ${new Date().toISOString()}`,
     "",
   ];
 
   for (const item of items) {
-    lines.push(`[${item.success ? "SUCCESS" : "FAILED"}] ${item.target.label}`);
-    lines.push(`Type: ${item.target.kind}`);
-    lines.push(`Description: ${item.target.description}`);
-    lines.push(`Message: ${item.message}`);
+    lines.push(`[${item.success ? messages.report.success : messages.report.failed}] ${item.target.label}`);
+    lines.push(`${messages.report.type}: ${item.target.kind}`);
+    lines.push(`${messages.report.description}: ${item.target.description}`);
+    lines.push(`${messages.report.message}: ${item.message}`);
     lines.push("");
   }
 
