@@ -58,13 +58,13 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
       <body className="antialiased">
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,#f8fafc,white_55%)] text-slate-950">
           <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 lg:px-10">
-            <Link href={`/${lang}`} className="flex items-center gap-2 text-lg font-semibold tracking-tight">
-              <span className="relative h-7 w-7 overflow-hidden rounded-full border border-slate-200 bg-white shadow-[0_10px_24px_-18px_rgba(15,23,42,0.45)]">
+            <Link href={`/${lang}`} className="flex items-center gap-3 text-lg font-semibold tracking-tight">
+              <span className="relative h-8 w-8 overflow-hidden rounded-[10px] border border-slate-200 bg-white shadow-[0_10px_24px_-18px_rgba(15,23,42,0.45)]">
                 <Image
                   src="/cleanclaw-og.png"
                   alt="CleanClaw logo"
                   fill
-                  sizes="28px"
+                  sizes="32px"
                   className="object-cover"
                   style={{ objectPosition: "50% 28%" }}
                   priority
