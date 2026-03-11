@@ -135,4 +135,8 @@ export const zh = {
       "当前版本不要求登录，也不采集账号信息。若后续引入统计或错误上报，官网会同步更新相应的隐私说明。",
     ],
   },
+  footer: {
+    copyright: "© 2026 CleanClaw. All rights reserved.",
+    note: "CleanClaw 是独立开发的第三方清理工具。",
+  },
 };

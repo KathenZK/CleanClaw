@@ -134,4 +134,8 @@ export const en: typeof zh = {
       "The current release does not require login and does not collect account data. If telemetry or error reporting is added later, the website will be updated with a matching privacy notice.",
     ],
   },
+  footer: {
+    copyright: "© 2026 CleanClaw. All rights reserved.",
+    note: "CleanClaw is an independently developed third-party cleanup tool.",
+  },
 };
