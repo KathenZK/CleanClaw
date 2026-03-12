@@ -7,6 +7,7 @@ import {
   publishedLabel,
   releaseUrl,
   windowsDownloadUrl,
+  windowsZipDownloadUrl,
 } from "@/lib/site";
 import { getLocalizedMetadata } from "@/lib/seo";
 import { isLang, type Lang } from "@/lib/i18n";
@@ -38,7 +39,7 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
 
   const messages = getMessages(lang);
   const { download } = messages;
-  const downloadHrefs = [macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl];
+  const downloadHrefs = [macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl, windowsZipDownloadUrl];
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 pb-24 pt-10 lg:px-10">
@@ -56,7 +57,7 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
         </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-3">
+      <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {download.cards.map((item, index) => (
           <article key={`${item.platform}-${item.architecture}`} className="rounded-3xl border border-slate-200 bg-white p-8">
             <p className="text-sm uppercase tracking-[0.18em] text-slate-500">{item.platform}</p>

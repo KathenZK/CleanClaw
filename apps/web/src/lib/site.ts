@@ -13,7 +13,11 @@ export const macX64DownloadUrl =
 export const windowsDownloadUrl =
   process.env.NEXT_PUBLIC_WINDOWS_X64_DOWNLOAD_URL ??
   process.env.NEXT_PUBLIC_WINDOWS_DOWNLOAD_URL ??
-  "https://github.com/KathenZK/CleanClaw/releases/download/v0.1.0/CleanClaw%20Setup%200.1.0.exe";
+  "https://github.com/KathenZK/CleanClaw/releases/download/v0.1.0/CleanClaw.Setup.0.1.0.exe";
+
+export const windowsZipDownloadUrl =
+  process.env.NEXT_PUBLIC_WINDOWS_X64_ZIP_DOWNLOAD_URL ??
+  "https://github.com/KathenZK/CleanClaw/releases/download/v0.1.0/CleanClaw-0.1.0-win-x64.zip";
 
 export const currentVersion = "v0.1.0";
 export const publishedLabel = "2026-03-10";

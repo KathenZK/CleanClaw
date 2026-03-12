@@ -30,7 +30,7 @@ export const en: typeof zh = {
     secondaryCta: "More download options",
     detectableTitle: "What it can find",
     detectableFooter:
-      "From app files to background services, every match is shown before cleanup. Downloads are now available for macOS Intel, macOS Apple Silicon, and Windows x64.",
+      "From app files to background services, every match is shown before cleanup. Downloads are now available for macOS Intel, macOS Apple Silicon, plus Windows x64 installer and ZIP builds.",
     processEyebrow: "How it works",
     processTitle: "Clean it up in one click.",
     process: [
@@ -69,7 +69,7 @@ export const en: typeof zh = {
   download: {
     metadata: {
       title: "Download CleanClaw",
-      description: "Get the latest CleanClaw installer for macOS Intel, macOS Apple Silicon, or Windows x64.",
+      description: "Get the latest CleanClaw installer for macOS Intel, macOS Apple Silicon, or Windows x64 in installer or ZIP form.",
     },
     eyebrow: "Download",
     title: "Download CleanClaw",
@@ -98,6 +98,13 @@ export const en: typeof zh = {
         cta: "Download for Windows x64",
         available: true,
       },
+      {
+        platform: "Windows",
+        architecture: "x64 ZIP",
+        description: "A portable `.zip` package for 64-bit Windows devices.",
+        cta: "Download Windows x64 ZIP",
+        available: true,
+      },
     ],
     releaseTitle: "Versions and release notes",
     releaseBody: "If you want release notes, older versions, or manual access to all installers, visit the GitHub release page.",
@@ -120,7 +127,7 @@ export const en: typeof zh = {
       },
       {
         question: "Which systems are supported?",
-        answer: "The current release includes installers for macOS Intel, macOS Apple Silicon, and Windows x64.",
+        answer: "The current release includes installers for macOS Intel, macOS Apple Silicon, plus Windows x64 installer and ZIP packages.",
       },
       {
         question: "Will it generate a cleanup report?",
