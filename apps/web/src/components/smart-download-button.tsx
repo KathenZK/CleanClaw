@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl } from "@/lib/site";
+import { macArm64DownloadUrl, macX64DownloadUrl, windowsArm64DownloadUrl, windowsDownloadUrl } from "@/lib/site";
 
 type DownloadTarget = {
   href: string;
@@ -59,6 +59,17 @@ async function detectDownloadTarget(fallbackHref: string): Promise<DownloadTarge
   const platform = (extendedNavigator.userAgentData?.platform ?? navigator.platform ?? "").toLowerCase();
 
   if (platform.includes("win") || userAgent.includes("windows")) {
+    const highEntropyValues = await extendedNavigator.userAgentData?.getHighEntropyValues?.([
+      "architecture",
+      "bitness",
+      "platform",
+    ]);
+    const architecture = highEntropyValues?.architecture?.toLowerCase() ?? "";
+
+    if (architecture.includes("arm")) {
+      return { href: windowsArm64DownloadUrl, external: true };
+    }
+
     return { href: windowsDownloadUrl, external: true };
   }
 

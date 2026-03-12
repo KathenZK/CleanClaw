@@ -12,6 +12,7 @@
     "build:mac:intel": "npm run build:app && electron-builder --mac dmg --x64 --publish never",
     "build:mac:arm64": "npm run build:app && electron-builder --mac dmg --arm64 --publish never",
     "build:win": "npm run build:app && electron-builder --win nsis --x64 --publish never",
+    "build:win:arm64": "npm run build:app && electron-builder --win zip --arm64 --publish never",
     "lint": "eslint .",
     "preview": "vite preview"
   },

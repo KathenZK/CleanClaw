@@ -6,8 +6,8 @@ import {
   macX64DownloadUrl,
   publishedLabel,
   releaseUrl,
+  windowsArm64DownloadUrl,
   windowsDownloadUrl,
-  windowsZipDownloadUrl,
 } from "@/lib/site";
 import { getLocalizedMetadata } from "@/lib/seo";
 import { isLang, type Lang } from "@/lib/i18n";
@@ -39,7 +39,7 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
 
   const messages = getMessages(lang);
   const { download } = messages;
-  const downloadHrefs = [macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl, windowsZipDownloadUrl];
+  const downloadHrefs = [macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl, windowsArm64DownloadUrl];
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 pb-24 pt-10 lg:px-10">

@@ -15,9 +15,9 @@ export const windowsDownloadUrl =
   process.env.NEXT_PUBLIC_WINDOWS_DOWNLOAD_URL ??
   "https://github.com/KathenZK/CleanClaw/releases/download/v0.1.0/CleanClaw.Setup.0.1.0.exe";
 
-export const windowsZipDownloadUrl =
-  process.env.NEXT_PUBLIC_WINDOWS_X64_ZIP_DOWNLOAD_URL ??
-  "https://github.com/KathenZK/CleanClaw/releases/download/v0.1.0/CleanClaw-0.1.0-win-x64.zip";
+export const windowsArm64DownloadUrl =
+  process.env.NEXT_PUBLIC_WINDOWS_ARM64_DOWNLOAD_URL ??
+  "https://github.com/KathenZK/CleanClaw/releases/download/v0.1.0/CleanClaw-0.1.0-win-arm64.zip";
 
 export const currentVersion = "v0.1.0";
 export const publishedLabel = "2026-03-10";
