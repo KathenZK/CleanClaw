@@ -2,8 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SmartDownloadButton } from "@/components/smart-download-button";
+import { getLocalizedPath, isLang, siteUrl, type Lang } from "@/lib/i18n";
 import { getLocalizedMetadata } from "@/lib/seo";
-import { isLang, type Lang } from "@/lib/i18n";
 import { getMessages } from "@/lib/messages";
 
 interface HomePageProps {
@@ -35,9 +35,26 @@ export default async function HomePage({ params }: HomePageProps) {
 
   const messages = getMessages(lang);
   const { home } = messages;
+  const softwareApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: messages.site.brand,
+    applicationCategory: "UtilitiesApplication",
+    applicationSubCategory: "System Cleanup Utility",
+    operatingSystem: ["macOS", "Windows"],
+    inLanguage: lang,
+    url: `${siteUrl}${getLocalizedPath(lang)}`,
+    downloadUrl: `${siteUrl}${getLocalizedPath(lang, "/download")}`,
+    description: home.metadata.description,
+    isAccessibleForFree: true,
+  };
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-col gap-16 px-6 pb-14 pt-6 lg:px-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+      />
       <section className="grid gap-10 border-t border-slate-200 pt-8 lg:grid-cols-[minmax(0,1.25fr)_22rem] lg:gap-16 lg:pt-12">
         <div className="space-y-6">
           <div className="space-y-6">
