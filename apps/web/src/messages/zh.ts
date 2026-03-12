@@ -24,7 +24,7 @@ export const zh = {
     lead: "扫描并删除 OpenClaw 的安装产物、配置、缓存、日志、后台服务、自启动项与 Windows 注册表残留。",
     body: "卸载软件最麻烦的地方，从来不是点一下删除，而是确认系统里还剩下什么。CleanClaw 把这些残留找出来、列清楚，再交给你决定是否移除。",
     primaryCta: "立即下载",
-    secondaryCta: "更多下载方式",
+    secondaryCta: "更多安装包类型",
     detectableTitle: "可识别内容",
     detectableFooter: "从主程序到后台服务，命中项都会先展示出来。当前已提供 macOS Intel、macOS Apple Silicon、Windows x64 与 Windows arm64 下载。",
     processEyebrow: "使用方式",
