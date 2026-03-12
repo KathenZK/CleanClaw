@@ -9,7 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "../globals.css";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { getLocalizedMetadata } from "@/lib/seo";
-import { getLocalizedPath, isLang, locales, type Lang } from "@/lib/i18n";
+import { getLocalizedPath, isLang, locales, siteUrl, type Lang } from "@/lib/i18n";
 import { getMessages } from "@/lib/messages";
 
 interface LocaleLayoutProps {
@@ -44,6 +44,28 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   }
 
   const messages = getMessages(lang);
+  const localizedHomeUrl = `${siteUrl}${getLocalizedPath(lang)}`;
+  const siteSchema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": `${siteUrl}#organization`,
+      name: messages.site.brand,
+      url: siteUrl,
+      logo: `${siteUrl}/icon.png`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      name: messages.site.brand,
+      url: localizedHomeUrl,
+      inLanguage: lang,
+      publisher: {
+        "@id": `${siteUrl}#organization`,
+      },
+    },
+  ];
   const navigation = [
     { href: getLocalizedPath(lang, "/"), label: messages.nav.home },
     { href: getLocalizedPath(lang, "/download"), label: messages.nav.download },
@@ -57,6 +79,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
         <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
       </head>
       <body className="antialiased">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }} />
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,#f8fafc,white_55%)] text-slate-950">
           <header className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-6 lg:px-10">
             <Link href={`/${lang}`} className="flex items-center gap-3 text-lg font-semibold tracking-tight">
