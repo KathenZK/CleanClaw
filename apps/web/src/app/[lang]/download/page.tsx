@@ -5,7 +5,6 @@ import {
   macArm64DownloadUrl,
   macX64DownloadUrl,
   publishedLabel,
-  releaseUrl,
   windowsArm64DownloadUrl,
   windowsDownloadUrl,
 } from "@/lib/site";
@@ -59,7 +58,10 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
 
       <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {download.cards.map((item, index) => (
-          <article key={`${item.platform}-${item.architecture}`} className="rounded-3xl border border-slate-200 bg-white p-8">
+          <article
+            key={`${item.platform}-${item.architecture}`}
+            className="flex h-full flex-col rounded-3xl border border-slate-200 bg-white p-8"
+          >
             <p className="text-sm uppercase tracking-[0.18em] text-slate-500">{item.platform}</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-slate-950">{item.architecture}</h2>
             <p className="mt-4 text-base leading-7 text-slate-600">{item.description}</p>
@@ -68,12 +70,12 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
                 href={downloadHrefs[index]}
                 target="_blank"
                 rel="noreferrer"
-                className="mt-8 inline-flex items-center justify-center rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+                className="mt-auto inline-flex items-center justify-center whitespace-pre-line rounded-full bg-slate-950 px-6 py-3 text-center text-sm leading-5 font-medium text-white transition hover:bg-slate-800"
               >
                 {item.cta}
               </a>
             ) : (
-              <div className="mt-8 inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-medium text-slate-500">
+              <div className="mt-auto inline-flex items-center justify-center whitespace-pre-line rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-center text-sm leading-5 font-medium text-slate-500">
                 {item.cta}
               </div>
             )}
@@ -81,18 +83,6 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
         ))}
       </section>
 
-      <section className="rounded-3xl border border-slate-200 bg-white p-8">
-        <h2 className="text-xl font-semibold text-slate-950">{download.releaseTitle}</h2>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-slate-600">{download.releaseBody}</p>
-        <a
-          href={releaseUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-6 inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:text-slate-950"
-        >
-          {download.releaseCta}
-        </a>
-      </section>
     </main>
   );
 }
