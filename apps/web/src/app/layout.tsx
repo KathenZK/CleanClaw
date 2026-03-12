@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/i18n";
+import { defaultLang, getLocalizedPath, siteUrl } from "@/lib/i18n";
 import { zh } from "@/messages/zh";
 
 export const metadata: Metadata = {
@@ -9,16 +9,16 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: `${siteUrl}/cleanclaw-og.png`,
-        width: 1024,
-        height: 1024,
+        url: `${siteUrl}${getLocalizedPath(defaultLang, "/opengraph-image")}`,
+        width: 1200,
+        height: 630,
         alt: "CleanClaw brand image",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: [`${siteUrl}/cleanclaw-og.png`],
+    images: [`${siteUrl}${getLocalizedPath(defaultLang, "/opengraph-image")}`],
   },
 };
 

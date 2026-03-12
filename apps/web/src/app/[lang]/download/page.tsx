@@ -8,8 +8,8 @@ import {
   windowsArm64DownloadUrl,
   windowsDownloadUrl,
 } from "@/lib/site";
+import { getLocalizedPath, isLang, siteUrl, type Lang } from "@/lib/i18n";
 import { getLocalizedMetadata } from "@/lib/seo";
-import { isLang, type Lang } from "@/lib/i18n";
 import { getMessages } from "@/lib/messages";
 
 interface DownloadPageProps {
@@ -39,9 +39,37 @@ export default async function DownloadPage({ params }: DownloadPageProps) {
   const messages = getMessages(lang);
   const { download } = messages;
   const downloadHrefs = [macArm64DownloadUrl, macX64DownloadUrl, windowsDownloadUrl, windowsArm64DownloadUrl];
+  const softwareApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: messages.site.brand,
+    applicationCategory: "UtilitiesApplication",
+    applicationSubCategory: "System Cleanup Utility",
+    softwareVersion: currentVersion,
+    operatingSystem: ["macOS", "Windows"],
+    inLanguage: lang,
+    url: `${siteUrl}${getLocalizedPath(lang, "/download")}`,
+    downloadUrl: downloadHrefs,
+    description: download.metadata.description,
+    isAccessibleForFree: true,
+    offers: download.cards.map((item, index) => ({
+      "@type": "Offer",
+      name: `${messages.site.brand} ${item.platform} ${item.architecture}`,
+      description: item.description,
+      url: downloadHrefs[index],
+      price: "0",
+      priceCurrency: "USD",
+      availability: item.available ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+      category: `${item.platform} ${item.architecture}`,
+    })),
+  };
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-col gap-8 px-6 pb-24 pt-10 lg:px-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
+      />
       <section className="rounded-4xl border border-slate-200 bg-white p-8 shadow-[0_30px_120px_-48px_rgba(15,23,42,0.35)] lg:p-12">
         <p className="text-sm uppercase tracking-[0.2em] text-slate-500">{download.eyebrow}</p>
         <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950">{download.title}</h1>

@@ -16,6 +16,7 @@ export function getLocalizedMetadata(
 ): Metadata {
   const path = options.path ?? "/";
   const canonicalPath = getLocalizedPath(lang, path);
+  const openGraphImageUrl = toAbsolute(getLocalizedPath(lang, "/opengraph-image"));
 
   return {
     title: options.title,
@@ -37,9 +38,9 @@ export function getLocalizedMetadata(
       type: "website",
       images: [
         {
-          url: `${siteUrl}/cleanclaw-og.png`,
-          width: 1024,
-          height: 1024,
+          url: openGraphImageUrl,
+          width: 1200,
+          height: 630,
           alt: "CleanClaw brand image",
         },
       ],
@@ -48,7 +49,7 @@ export function getLocalizedMetadata(
       card: "summary_large_image",
       title: options.title,
       description: options.description,
-      images: [`${siteUrl}/cleanclaw-og.png`],
+      images: [openGraphImageUrl],
     },
   };
 }
